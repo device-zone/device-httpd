@@ -1,0 +1,17 @@
+# systemd service for managing all httpd autoconfiguration.
+
+[Unit]
+Description=Apache httpd Server Configuration Autodiscovery
+ReloadPropagatedFrom=httpd.service
+Before=httpd@.service
+After=firewalld.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /usr/libexec/device-httpd-autodiscovery
+ExecReload=/bin/bash /usr/libexec/device-httpd-autodiscovery
+RemainAfterExit=on
+
+[Install]
+WantedBy=multi-user.target
+

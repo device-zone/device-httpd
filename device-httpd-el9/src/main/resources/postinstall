@@ -1,0 +1,7 @@
+if [ $1 = 1 ]; then
+
+  # Register the service
+  /usr/bin/systemctl enable dirsrv.target
+  /usr/bin/systemctl enable dirsrv-autodiscovery.service
+fi
+

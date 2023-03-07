@@ -1,0 +1,33 @@
+#!/bin/sh
+
+set -e
+umask 0002
+
+OPTIONS="--mark name --hostname name"
+
+if [ "$1" == "--" ]; then
+
+  /usr/libexec/device-set ${OPTIONS} "$@"
+
+  find /etc/device/services/ldap/instance/ -mindepth 1 -maxdepth 1 -type l | \
+  while read line; do
+
+    if test -f "$line/disabled.bin"; then
+      continue;
+    fi
+
+    if test ! -f "$line/name.txt"; then
+      continue;
+    fi
+    instance="$(head $line/name.txt)"
+
+    /usr/bin/sudo /usr/bin/systemctl try-reload-or-restart "httpd-postdiscovery@${instance}.service"
+  
+  done
+
+elif [ "$1" == "-c" ]; then
+
+  /usr/libexec/device-set ${OPTIONS} "$@"
+
+fi
+

@@ -1,0 +1,33 @@
+#!/bin/sh
+
+set -e
+umask 0002
+
+OPTIONS="--set name --hostname name --required --fqdn host --relation-base /etc/device/services/www/instance --relation-name name --relation-suffix .txt --relation instance"
+
+if [ "$1" == "--" ]; then
+
+  /usr/libexec/device-set ${OPTIONS} "$@"
+
+  find /etc/device/services/www/instance/ -mindepth 1 -maxdepth 1 -type l | \
+  while read line; do
+
+    if test -f "$line/disabled.bin"; then
+      continue;
+    fi
+
+    if test ! -f "$line/name.txt"; then
+      continue;
+    fi
+    instance="$(head $line/name.txt)"
+
+    /usr/bin/sudo /usr/bin/systemctl try-reload-or-restart "httpd-postdiscovery@${instance}.service"
+  
+  done
+
+elif [ "$1" == "-c" ]; then
+
+  /usr/libexec/device-set ${OPTIONS} "$@" | cat
+
+fi
+

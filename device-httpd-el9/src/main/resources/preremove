@@ -1,0 +1,7 @@
+if [ $1 = 0 ]; then
+  /usr/bin/systemctl stop dirsrv-autodiscovery.service
+  /usr/bin/systemctl stop dirsrv.target
+  /usr/bin/systemctl disable dirsrv-autodiscovery.service
+  /usr/bin/systemctl disable dirsrv.target
+fi
+
