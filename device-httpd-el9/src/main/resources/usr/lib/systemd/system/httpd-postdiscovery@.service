@@ -2,7 +2,7 @@
   
 [Unit]
 Description=Apache httpd Server Postdiscovery %i.
-ReloadPropagatedFrom=httpd@%i.service
+PartOf=httpd@%i.service
 After=httpd@%i.service
 After=firewalld.service
 
@@ -14,4 +14,5 @@ RemainAfterExit=on
 
 [Install]
 WantedBy=multi-user.target
+Also=httpd@%i.service
 

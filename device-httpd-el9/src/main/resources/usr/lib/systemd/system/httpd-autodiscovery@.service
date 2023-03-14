@@ -2,7 +2,7 @@
 
 [Unit]
 Description=Apache httpd Server Autodiscovery %i.
-ReloadPropagatedFrom=httpd@%i.service
+PartOf=httpd@%i.service
 Before=httpd@%i.service
 After=firewalld.service
 
