@@ -107,6 +107,19 @@
               <groupname>root</groupname>
             </mapping>
             <mapping>
+              <directory>/usr/libexec/device-httpd-autodiscovery.d</directory>
+              <directoryIncluded>false</directoryIncluded>
+              <filemode>755</filemode>
+              <username>root</username>
+              <groupname>root</groupname>
+              <sources>
+                <source>
+                  <location>target/classes/usr/libexec/device-httpd-autodiscovery-mpm</location>
+                  <destination>10-mpm</destination>
+                </source>
+              </sources>
+            </mapping>
+            <mapping>
               <directory>/usr/libexec/device-httpd-postdiscovery.d</directory>
               <directoryIncluded>true</directoryIncluded>
               <filemode>755</filemode>
@@ -195,6 +208,38 @@
                 </source>
                 <source>
                   <location>target/classes/usr/libexec/device/services/www/host/set</location>
+                </source>
+              </sources>
+            </mapping>
+            <mapping>
+              <directory>/etc/device/services/www/mpm</directory>
+              <directoryIncluded>true</directoryIncluded>
+              <filemode>2775</filemode>
+              <username>root</username>
+              <groupname>device</groupname>
+            </mapping>
+            <mapping>
+              <directory>/usr/libexec/device/services/www/mpm</directory>
+              <directoryIncluded>true</directoryIncluded>
+              <filemode>755</filemode>
+              <username>root</username>
+              <groupname>root</groupname>
+            </mapping>
+            <mapping>
+              <directory>/usr/libexec/device/services/www/mpm</directory>
+              <directoryIncluded>false</directoryIncluded>
+              <filemode>755</filemode>
+              <username>root</username>
+              <groupname>root</groupname>
+              <sources>
+                <source>
+                  <location>target/classes/usr/libexec/device/services/www/mpm/add</location>
+                </source>
+                <source>
+                  <location>target/classes/usr/libexec/device/services/www/mpm/remove</location>
+                </source>
+                <source>
+                  <location>target/classes/usr/libexec/device/services/www/mpm/set</location>
                 </source>
               </sources>
             </mapping>

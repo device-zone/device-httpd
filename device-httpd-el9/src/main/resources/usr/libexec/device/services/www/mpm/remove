@@ -3,10 +3,7 @@
 set -e
 umask 0002
 
-tmpdir="$(mktemp -d)"
-trap 'rm -rf -- "${tmpdir}"' EXIT
-
-OPTIONS="--add name --hostname name --polar disabled --relation-base /etc/device/services/www/mpm --relation-name name --relation-suffix .txt --relation mpm --required"
+OPTIONS="--mark name --hostname name"
 
 if [ "$1" == "--" ]; then
 
@@ -19,4 +16,5 @@ elif [ "$1" == "-c" ]; then
   /usr/libexec/device-set ${OPTIONS} "$@"
 
 fi
+
 

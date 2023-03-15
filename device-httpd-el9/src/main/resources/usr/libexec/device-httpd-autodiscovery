@@ -27,31 +27,6 @@ cd "${tmpdir}"
 
 
 #
-# Per instance? Run all scripts
-
-if [ $# -ne 0 ]; then
-
-  instance="${1}"
-
-  logger -t "httpd-autodiscovery@${instance}" "running autodiscovery for httpd server instance ${instance}..."
-
-  find "$0.d" -type f -executable | sort | \
-  while read x; do
-    "$x" "${instance}" < /dev/null || touch error;
-  done
-
-  if test ! -f "error"; then
-    logger -t "httpd-autodiscovery@${instance}" "completed autodiscovery for httpd server instance ${instance}."
-    exit 0
-  else
-    logger -t "httpd-autodiscovery@${instance}" "failed autodiscovery for httpd server instance ${instance}."
-    exit 1
-  fi
-
-fi
-
-
-#
 # Create instance that does not yet exist
 create_instance() {
   instance="${1}"
@@ -65,6 +40,8 @@ ServerRoot "/etc/httpd"
 
 Listen 80
 
+PidFile /run/httpd/httpd-device-${instance}.pid
+
 User apache
 Group apache
 
@@ -74,7 +51,6 @@ Group apache
 </Directory>
 
 LoadModule authz_core_module modules/mod_authz_core.so
-LoadModule mpm_event_module modules/mod_mpm_event.so
 LoadModule systemd_module modules/mod_systemd.so
 LoadModule unixd_module modules/mod_unixd.so
 
@@ -236,6 +212,7 @@ EOF
 
   install -m 640 "device-${instance}.conf" "/etc/httpd/conf/device-${instance}.conf"
   install -d 0750 "/etc/httpd/conf.d/device-${instance}"
+
 }
 
 
@@ -246,6 +223,30 @@ remove_instance() {
 
   rm -f "/etc/httpd/conf/device-${instance}.conf"
   rm -rf "/etc/httpd/conf.d/device-${instance}"
+}
+
+
+#
+# Per application? Run all scripts
+
+run_scripts() {
+
+  instance="${1}"
+  line="${2}"
+
+  logger -t "httpd-autodiscovery@${instance}" "running autodiscovery for httpd instance ${instance}..."
+
+  find "$0.d" -type f -executable | sort | \
+  while read x; do
+    "$x" "${instance}" "${line}" < /dev/null || touch error;
+  done
+
+  if test ! -f "error"; then
+    logger -t "httpd-autodiscovery@${instance}" "completed autodiscovery for httpd instance ${instance}."
+  else
+    logger -t "httpd-autodiscovery@${instance}" "failed autodiscovery for httpd instance ${instance}."
+  fi
+
 }
 
 
@@ -292,6 +293,7 @@ while read line; do
 
     logger -t httpd-autodiscovery "creating httpd server instance ${instance}..."
     create_instance "${instance}"
+    run_scripts "${instance}" "${line}"
     logger -t httpd-autodiscovery "created httpd server instance ${instance}."
 
     if test -f "$line/disabled.bin"; then
@@ -318,7 +320,11 @@ while read line; do
       systemctl disable "httpd@device-${instance}"
       systemctl stop "httpd@device-${instance}"
 
+      run_scripts "${instance}" "${line}"
+
     else
+
+      run_scripts "${instance}" "${line}"
 
       systemctl enable "httpd@device-${instance}"
       systemctl start "httpd@device-${instance}"
@@ -326,6 +332,15 @@ while read line; do
     fi
 
     rm -f "$line/updated"
+
+  # something we depend on changed
+  else
+
+    instance="$(head $line/name.txt)"
+
+    run_scripts "${instance}" "${line}"
+
+    systemctl try-reload-or-restart "httpd@device-${instance}"
 
   fi
 
