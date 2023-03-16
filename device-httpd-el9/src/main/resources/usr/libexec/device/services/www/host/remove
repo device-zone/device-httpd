@@ -3,7 +3,7 @@
 set -e
 umask 0002
 
-OPTIONS="--remove name --hostname name"
+OPTIONS="--mark name --hostname name"
 
 if [ "$1" == "--" ]; then
 
