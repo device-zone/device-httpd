@@ -119,7 +119,11 @@
                 </source>
                 <source>
                   <location>target/classes/usr/libexec/device-httpd-autodiscovery-listen</location>
-                  <destination>10-listen</destination>
+                  <destination>20-listen</destination>
+                </source>
+                <source>
+                  <location>target/classes/usr/libexec/device-httpd-autodiscovery-virtualhost</location>
+                  <destination>30-virtualhost</destination>
                 </source>
                 <source>
                   <location>target/classes/usr/libexec/device-httpd-autodiscovery-configtest</location>
@@ -127,6 +131,28 @@
                 </source>
               </sources>
             </mapping>
+            <mapping>
+              <directory>/usr/libexec/device-httpd-autodiscovery.d/virtualhost</directory>
+              <directoryIncluded>true</directoryIncluded>
+              <filemode>755</filemode>
+              <username>root</username>
+              <groupname>root</groupname>
+            </mapping>
+<!--
+	    <mapping>
+              <directory>/usr/libexec/device-httpd-autodiscovery.d/virtualhost</directory>
+              <directoryIncluded>false</directoryIncluded>
+              <filemode>755</filemode>
+              <username>root</username>
+              <groupname>root</groupname>
+              <sources>
+                <source>
+                  <location>target/classes/usr/libexec/device-httpd-autodiscovery-virtualhost</location>
+                  <destination>10-virtualhost</destination>
+                </source>
+              </sources>
+	    </mapping>
+-->
             <mapping>
               <directory>/usr/libexec/device-httpd-postdiscovery.d</directory>
               <directoryIncluded>true</directoryIncluded>
@@ -188,34 +214,34 @@
               </sources>
             </mapping>
             <mapping>
-              <directory>/etc/device/services/www/host</directory>
+              <directory>/etc/device/services/www/virtualhost</directory>
               <directoryIncluded>true</directoryIncluded>
               <filemode>2775</filemode>
               <username>root</username>
               <groupname>device</groupname>
             </mapping>
             <mapping>
-              <directory>/usr/libexec/device/services/www/host</directory>
+              <directory>/usr/libexec/device/services/www/virtualhost</directory>
               <directoryIncluded>true</directoryIncluded>
               <filemode>755</filemode>
               <username>root</username>
               <groupname>root</groupname>
             </mapping>
             <mapping>
-              <directory>/usr/libexec/device/services/www/host</directory>
+              <directory>/usr/libexec/device/services/www/virtualhost</directory>
               <directoryIncluded>false</directoryIncluded>
               <filemode>755</filemode>
               <username>root</username>
               <groupname>root</groupname>
               <sources>
                 <source>
-                  <location>target/classes/usr/libexec/device/services/www/host/add</location>
+                  <location>target/classes/usr/libexec/device/services/www/virtualhost/add</location>
                 </source>
                 <source>
-                  <location>target/classes/usr/libexec/device/services/www/host/remove</location>
+                  <location>target/classes/usr/libexec/device/services/www/virtualhost/remove</location>
                 </source>
                 <source>
-                  <location>target/classes/usr/libexec/device/services/www/host/set</location>
+                  <location>target/classes/usr/libexec/device/services/www/virtualhost/set</location>
                 </source>
               </sources>
             </mapping>
