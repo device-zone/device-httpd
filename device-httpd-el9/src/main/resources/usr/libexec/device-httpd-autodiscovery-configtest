@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [ $# -eq 2 ]; then
+
+  instance="${1}"
+  line="${2}"
+
+  /usr/sbin/httpd -t -f conf/device-${instance}.conf 2>&1 | sed -r -n 's/AH[0-9]*: (.*)$/\1/p' >> ${line}/warning
+
+fi
+

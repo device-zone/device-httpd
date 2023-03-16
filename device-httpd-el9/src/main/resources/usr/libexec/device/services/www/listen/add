@@ -1,9 +1,12 @@
 #!/bin/sh
-
+  
 set -e
 umask 0002
 
-OPTIONS="--set name --hostname name --required --fqdn host --relation-base /etc/device/services/www/instance --relation-name name --relation-suffix .txt --relation instance"
+tmpdir="$(mktemp -d)"
+trap 'rm -rf -- "${tmpdir}"' EXIT
+
+OPTIONS="--add name --hostname name --port port --port tls-port --fqdn address --required --relation-base /etc/device/services/www/instance --relation-name name --relation-suffix .txt --relation instance"
 
 if [ "$1" == "--" ]; then
 
@@ -16,4 +19,5 @@ elif [ "$1" == "-c" ]; then
   /usr/libexec/device-set ${OPTIONS} "$@" | cat
 
 fi
+
 

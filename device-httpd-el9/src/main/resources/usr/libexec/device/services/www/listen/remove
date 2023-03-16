@@ -1,5 +1,5 @@
 #!/bin/sh
-
+  
 set -e
 umask 0002
 
@@ -16,4 +16,5 @@ elif [ "$1" == "-c" ]; then
   /usr/libexec/device-set ${OPTIONS} "$@"
 
 fi
+
 

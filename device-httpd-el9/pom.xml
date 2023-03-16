@@ -117,6 +117,14 @@
                   <location>target/classes/usr/libexec/device-httpd-autodiscovery-mpm</location>
                   <destination>10-mpm</destination>
                 </source>
+                <source>
+                  <location>target/classes/usr/libexec/device-httpd-autodiscovery-listen</location>
+                  <destination>10-listen</destination>
+                </source>
+                <source>
+                  <location>target/classes/usr/libexec/device-httpd-autodiscovery-configtest</location>
+                  <destination>99-configtest</destination>
+                </source>
               </sources>
             </mapping>
             <mapping>
@@ -240,6 +248,38 @@
                 </source>
                 <source>
                   <location>target/classes/usr/libexec/device/services/www/mpm/set</location>
+                </source>
+              </sources>
+            </mapping>
+            <mapping>
+              <directory>/etc/device/services/www/listen</directory>
+              <directoryIncluded>true</directoryIncluded>
+              <filemode>2775</filemode>
+              <username>root</username>
+              <groupname>device</groupname>
+            </mapping>
+            <mapping>
+              <directory>/usr/libexec/device/services/www/listen</directory>
+              <directoryIncluded>true</directoryIncluded>
+              <filemode>755</filemode>
+              <username>root</username>
+              <groupname>root</groupname>
+            </mapping>
+            <mapping>
+              <directory>/usr/libexec/device/services/www/listen</directory>
+              <directoryIncluded>false</directoryIncluded>
+              <filemode>755</filemode>
+              <username>root</username>
+              <groupname>root</groupname>
+              <sources>
+                <source>
+                  <location>target/classes/usr/libexec/device/services/www/listen/add</location>
+                </source>
+                <source>
+                  <location>target/classes/usr/libexec/device/services/www/listen/remove</location>
+                </source>
+                <source>
+                  <location>target/classes/usr/libexec/device/services/www/listen/set</location>
                 </source>
               </sources>
             </mapping>

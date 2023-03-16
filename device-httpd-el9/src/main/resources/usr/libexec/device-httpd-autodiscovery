@@ -38,8 +38,6 @@ create_instance() {
 
 ServerRoot "/etc/httpd"
 
-Listen 80
-
 PidFile /run/httpd/httpd-device-${instance}.pid
 
 User apache
@@ -235,6 +233,8 @@ run_scripts() {
   line="${2}"
 
   logger -t "httpd-autodiscovery@${instance}" "running autodiscovery for httpd instance ${instance}..."
+
+  rm -f "${line}/warning"
 
   find "$0.d" -type f -executable | sort | \
   while read x; do
