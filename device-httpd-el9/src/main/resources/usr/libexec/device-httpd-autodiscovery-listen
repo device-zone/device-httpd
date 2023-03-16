@@ -14,7 +14,7 @@ if [ $# -eq 2 ]; then
 
 EOF
 
-  find /etc/device/services/www/listen/ -mindepth 1 -maxdepth 1 -type l | \
+  # find /etc/device/services/www/listen/ -mindepth 1 -maxdepth 1 -type l
   while read line; do
 
     if test ! -f "$line/instance.d/name.txt" -o "${instance}" != "$(head $line/instance.d/name.txt)"; then
@@ -93,7 +93,7 @@ EOF
       fi
     fi
 
-  done
+  done < <(find /etc/device/services/www/listen/ -mindepth 1 -maxdepth 1 -type l)
 
   #
   # catchall - no listens?
