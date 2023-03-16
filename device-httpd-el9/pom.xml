@@ -132,27 +132,25 @@
               </sources>
             </mapping>
             <mapping>
-              <directory>/usr/libexec/device-httpd-autodiscovery.d/virtualhost</directory>
+              <directory>/usr/libexec/device-httpd-autodiscovery.d/virtualhost.d</directory>
               <directoryIncluded>true</directoryIncluded>
               <filemode>755</filemode>
               <username>root</username>
               <groupname>root</groupname>
             </mapping>
-<!--
 	    <mapping>
-              <directory>/usr/libexec/device-httpd-autodiscovery.d/virtualhost</directory>
+              <directory>/usr/libexec/device-httpd-autodiscovery.d/virtualhost.d</directory>
               <directoryIncluded>false</directoryIncluded>
               <filemode>755</filemode>
               <username>root</username>
               <groupname>root</groupname>
               <sources>
                 <source>
-                  <location>target/classes/usr/libexec/device-httpd-autodiscovery-virtualhost</location>
-                  <destination>10-virtualhost</destination>
+                  <location>target/classes/usr/libexec/device-httpd-autodiscovery-virtualhost-tls</location>
+                  <destination>10-tls</destination>
                 </source>
               </sources>
 	    </mapping>
--->
             <mapping>
               <directory>/usr/libexec/device-httpd-postdiscovery.d</directory>
               <directoryIncluded>true</directoryIncluded>
@@ -320,7 +318,9 @@
           </preremoveScriptlet>
           <requires>
             <require>httpd</require>
+            <require>mod_ssl</require>
             <require>device</require>
+            <require>redwax-tool</require>
           </requires>
         </configuration>
       </plugin>

@@ -3,7 +3,7 @@
 set -e
 umask 0002
 
-OPTIONS="--set name --hostname name --required --fqdn host --relation-base /etc/device/services/www/listen --relation-name name --relation-suffix .txt --relation listen"
+OPTIONS="--set name --hostname name --required --fqdn server-name --relation-base /etc/device/services/www/listen --relation-name name --relation-suffix .txt --relation listen"
 
 if [ "$1" == "--" ]; then
 
