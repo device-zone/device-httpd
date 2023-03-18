@@ -53,6 +53,14 @@ enable_instance() {
     servername=$(hostname -f)
   fi
 
+  if test -f "${line}/tls-verify.txt"; then
+    tlsverify="$(head -n 1 ${line}/tls-verify.txt)"
+  fi
+
+  if test -f "${line}/tls-ca-certs.crt"; then
+    tlscacerts=$(readlink -f "$line/tls-ca-certs.crt")
+  fi
+
   if test -n "${tlslisten}"; then
 
     install -m 750 -d "/run/httpd/device-${instance}"
@@ -77,6 +85,18 @@ enable_instance() {
 
       # give up and skip virtual host creation
       return
+    fi
+
+    if test -n "${tlsverify}"; then
+
+      if test -z "${tlscacerts}"; then
+
+        logger -t httpd-autodiscovery@${instance} "tls-verify set but no tls-ca-certs set for ${servername}. Skipping virtualhost."
+
+        # give up and skip virtual host creation
+	return
+      fi
+
     fi
 
   fi
@@ -122,6 +142,18 @@ EOF
   SSLCertificateFile /run/httpd/device-${instance}/${virtualhost}.crt
   SSLCertificateKeyFile /run/httpd/device-${instance}/${virtualhost}.key
 
+EOF
+
+    if test -n "${tlsverify}" -a -n "${tlscacerts}"; then
+      cat >> "secure-${virtualhost}.conf" <<- EOF
+  SSLVerifyClient ${tlsverify}
+  SSLVerifyDepth 10
+  SSLCACertificateFile "${tlscacerts}"
+
+EOF
+    fi
+
+    cat >> "secure-${virtualhost}.conf" <<- EOF
   IncludeOptional /etc/httpd/conf.device.d/instance/${instance}/secure-${virtualhost}.d/*.conf
 EOF
 

@@ -283,6 +283,18 @@
               </sources>
             </mapping>
             <mapping>
+              <directory>/usr/libexec/device/services/www/virtualhost</directory>
+              <directoryIncluded>false</directoryIncluded>
+              <filemode>644</filemode>
+              <username>root</username>
+              <groupname>root</groupname>
+              <sources>
+                <source>
+                  <location>target/classes/usr/libexec/device/services/www/virtualhost/tls-verify.txt</location>
+                </source>
+              </sources>
+            </mapping>
+            <mapping>
               <directory>/etc/device/services/www/mpm</directory>
               <directoryIncluded>true</directoryIncluded>
               <filemode>2775</filemode>
