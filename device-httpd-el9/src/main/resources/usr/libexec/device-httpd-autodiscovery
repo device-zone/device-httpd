@@ -203,13 +203,13 @@ EnableSendfile on
 # Supplemental configuration
 #
 # Load config files in the "/etc/httpd/conf.d" directory, if any.
-IncludeOptional conf.device.d/${instance}/*.conf
+IncludeOptional conf.device.d/instance/${instance}/*.conf
 
 
 EOF
 
   install -m 640 "device-${instance}.conf" "/etc/httpd/conf/device-${instance}.conf"
-  install -d 0750 "/etc/httpd/conf.device.d/${instance}"
+  install -d 0750 "/etc/httpd/conf.device.d/instance/${instance}"
 
 }
 
@@ -220,7 +220,7 @@ remove_instance() {
   instance="${1}"
 
   rm -f "/etc/httpd/conf/device-${instance}.conf"
-  rm -rf "/etc/httpd/conf.device.d/${instance}"
+  rm -rf "/etc/httpd/conf.device.d/instance/${instance}"
 }
 
 

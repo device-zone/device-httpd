@@ -1,0 +1,47 @@
+#!/bin/bash
+
+#
+# Handle listening sockets
+
+# find /etc/device/services/www/listen/ -mindepth 1 -maxdepth 1 -type l
+while read line; do
+
+  port=""
+  tlsport=""
+
+  if test -f "${line}/port.txt"; then
+    port="$(head ${line}/port.txt)"
+
+    if command -v /usr/bin/firewall-cmd 2>/dev/null; then
+      logger -t httpd-postdiscovery "Notice: enabling firewall for http port ${port}..."
+      /usr/bin/firewall-cmd --quiet --zone=public --add-port=${port}/tcp 2> /dev/null || true
+    fi
+
+  fi
+
+  if test -f "${line}/tls-port.txt"; then
+    tlsport="$(head ${line}/tls-port.txt)"
+
+    if command -v /usr/bin/firewall-cmd 2>/dev/null; then
+      logger -t httpd-postdiscovery "Notice: opening firewall for https port ${tlsport}..."
+      /usr/bin/firewall-cmd --quiet --zone=public --add-port=${tlsport}/tcp 2> /dev/null || true
+    fi
+
+  fi
+
+  #
+  # catchall - no ports?
+  if test -z "${port}" -a -z "${tlsport}"; then
+
+    if command -v /usr/bin/firewall-cmd 2>/dev/null; then
+      logger -t httpd-postdiscovery "Notice: enabling firewall for http port 80..."
+      /usr/bin/firewall-cmd --quiet --zone=public --add-service=http/tcp 2> /dev/null || true
+      logger -t httpd-postdiscovery "Notice: enabling firewall for https port 443..."
+      /usr/bin/firewall-cmd --quiet --zone=public --add-service=https/tcp 2> /dev/null || true
+    fi
+
+  fi
+
+done < <(find /etc/device/services/www/listen/ -mindepth 1 -maxdepth 1 -type l)
+
+

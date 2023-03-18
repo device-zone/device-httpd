@@ -122,9 +122,19 @@ EOF
   SSLCertificateFile /run/httpd/device-${instance}/${virtualhost}.crt
   SSLCertificateKeyFile /run/httpd/device-${instance}/${virtualhost}.key
 
-  IncludeOptional /etc/httpd/conf.device.d/${instance}/secure-${virtualhost}.d/*.conf
+  IncludeOptional /etc/httpd/conf.device.d/instance/${instance}/secure-${virtualhost}.d/*.conf
+EOF
+
+    if test -n "${servername}"; then
+      cat >> "secure-${virtualhost}.conf" <<- EOF
+  IncludeOptional /etc/httpd/conf.device.d/secure/${servername}/*.conf
+EOF
+    fi
+
+    cat >> "secure-${virtualhost}.conf" <<- EOF
 </VirtualHost>
 EOF
+
   fi
 
   if test -n "${listen}"; then
@@ -142,15 +152,25 @@ EOF
     fi
 
     cat >> "virtual-${virtualhost}.conf" <<- EOF
-  IncludeOptional /etc/httpd/conf.device.d/${instance}/virtualhost-${virtualhost}.d/*.conf
+  IncludeOptional /etc/httpd/conf.device.d/instance/${instance}/virtualhost-${virtualhost}.d/*.conf
+EOF
+
+    if test -n "${servername}"; then
+      cat >> "virtual-${virtualhost}.conf" <<- EOF
+  IncludeOptional /etc/httpd/conf.device.d/virtual/${servername}/*.conf
+EOF
+    fi
+
+    cat >> "virtual-${virtualhost}.conf" <<- EOF
 </VirtualHost>
 EOF
+
   fi
 
-  install -m 640 "virtual-${virtualhost}.conf" "/etc/httpd/conf.device.d/${instance}/virtual-${virtualhost}.conf"
-  install -m 640 "secure-${virtualhost}.conf" "/etc/httpd/conf.device.d/${instance}/secure-${virtualhost}.conf"
-  install -d 0750 "/etc/httpd/conf.device.d/${instance}/virtual-${virtualhost}.d/"
-  install -d 0750 "/etc/httpd/conf.device.d/${instance}/secure-${virtualhost}.d/"
+  install -m 640 "virtual-${virtualhost}.conf" "/etc/httpd/conf.device.d/instance/${instance}/virtual-${virtualhost}.conf"
+  install -m 640 "secure-${virtualhost}.conf" "/etc/httpd/conf.device.d/instance/${instance}/secure-${virtualhost}.conf"
+  install -d 0750 "/etc/httpd/conf.device.d/instance/${instance}/virtual-${virtualhost}.d/"
+  install -d 0750 "/etc/httpd/conf.device.d/instance/${instance}/secure-${virtualhost}.d/"
 
   run_scripts "${instance}" "${virtualhost}" "${line}"
 }
@@ -162,10 +182,10 @@ disable_instance() {
   instance="${1}"
   virtualhost="${2}"
 
-  rm -f "/etc/httpd/conf.device.d/${instance}/virtual-${virtualhost}.conf"
-  rm -f "/etc/httpd/conf.device.d/${instance}/secure-${virtualhost}.conf"
-  rm -rf "/etc/httpd/conf.device.d/${instance}/virtual-${virtualhost}.d/"
-  rm -rf "/etc/httpd/conf.device.d/${instance}/secure-${virtualhost}.d/"
+  rm -f "/etc/httpd/conf.device.d/instance/${instance}/virtual-${virtualhost}.conf"
+  rm -f "/etc/httpd/conf.device.d/instance/${instance}/secure-${virtualhost}.conf"
+  rm -rf "/etc/httpd/conf.device.d/instance/${instance}/virtual-${virtualhost}.d/"
+  rm -rf "/etc/httpd/conf.device.d/instance/${instance}/secure-${virtualhost}.d/"
 }
 
 

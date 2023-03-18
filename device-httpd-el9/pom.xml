@@ -90,6 +90,27 @@
               <groupname>root</groupname>
             </mapping>
             <mapping>
+              <directory>/etc/httpd/conf.device.d/instance</directory>
+              <directoryIncluded>true</directoryIncluded>
+              <filemode>755</filemode>
+              <username>root</username>
+              <groupname>root</groupname>
+            </mapping>
+            <mapping>
+              <directory>/etc/httpd/conf.device.d/virtual</directory>
+              <directoryIncluded>true</directoryIncluded>
+              <filemode>755</filemode>    
+              <username>root</username>
+              <groupname>root</groupname>
+            </mapping>
+            <mapping>
+              <directory>/etc/httpd/conf.device.d/secure</directory>
+              <directoryIncluded>true</directoryIncluded>
+              <filemode>755</filemode>    
+              <username>root</username>
+              <groupname>root</groupname>
+            </mapping>
+            <mapping>
               <directory>/usr/libexec/</directory>
               <directoryIncluded>false</directoryIncluded>
               <filemode>755</filemode>

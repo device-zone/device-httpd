@@ -67,7 +67,7 @@ EOF
   fi
 
 
-  install -m 640 "device-${instance}-mpm.conf" "/etc/httpd/conf.device.d/${instance}"/mpm.conf
+  install -m 640 "device-${instance}-mpm.conf" "/etc/httpd/conf.device.d/instance/${instance}"/mpm.conf
 
 fi
 

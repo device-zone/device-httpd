@@ -1,0 +1,18 @@
+# systemd service for managing all httpd postconfiguration.
+
+[Unit]
+Description=Apache httpd Server Configuration Postdiscovery
+ReloadPropagatedFrom=httpd-autodiscovery.service
+After=httpd-autodiscovery.service
+After=httpd@.service
+After=firewalld.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /usr/libexec/device-httpd-postdiscovery
+ExecReload=/bin/bash /usr/libexec/device-httpd-postdiscovery
+RemainAfterExit=on
+
+[Install]
+WantedBy=multi-user.target
+

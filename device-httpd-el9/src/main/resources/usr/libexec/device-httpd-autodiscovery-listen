@@ -105,7 +105,7 @@ Listen localhost:80 http
 EOF
   fi
 
-  install -m 640 "device-${instance}-listen.conf" "/etc/httpd/conf.device.d/${instance}"/listen.conf
+  install -m 640 "device-${instance}-listen.conf" "/etc/httpd/conf.device.d/instance/${instance}"/listen.conf
 
 fi
 
