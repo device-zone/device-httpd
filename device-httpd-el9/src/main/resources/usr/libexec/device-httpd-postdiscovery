@@ -29,24 +29,18 @@ cd "${tmpdir}"
 #
 # Per instance? Run all scripts
 
-if [ $# -ne 0 ]; then
+logger -t "httpd-postdiscovery" "running postdiscovery for httpd servers..."
 
-  instance="${1}"
+find "$0.d" -type f -executable | sort | \
+while read x; do
+  "$x" < /dev/null || touch error;
+done
 
-  logger -t "httpd-postdiscovery@${instance}" "running postdiscovery for httpd server instance ${instance}..."
-
-  find "$0.d" -type f -executable | sort | \
-  while read x; do
-    "$x" "${instance}" < /dev/null || touch error;
-  done
-
-  if test ! -f "error"; then
-    logger -t "httpd-postdiscovery@${instance}" "completed postdiscovery for httpd server instance ${instance}."
-    exit 0
-  else
-    logger -t "httpd-postdiscovery@${instance}" "failed postdiscovery for httpd server instance ${instance}."
-    exit 1
-  fi
-
+if test ! -f "error"; then
+  logger -t "httpd-postdiscovery" "completed postdiscovery for httpd servers."
+  exit 0
+else
+  logger -t "httpd-postdiscovery" "failed postdiscovery for httpd servers."
+  exit 1
 fi
 

@@ -1,5 +1,7 @@
 if [ $1 = 0 ]; then
   /usr/bin/systemctl stop httpd-autodiscovery.service
+  /usr/bin/systemctl stop httpd-postdiscovery.service
   /usr/bin/systemctl disable httpd-autodiscovery.service
+  /usr/bin/systemctl disable httpd-postdiscovery.service
 fi
 

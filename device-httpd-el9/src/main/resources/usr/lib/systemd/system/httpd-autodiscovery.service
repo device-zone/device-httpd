@@ -4,7 +4,6 @@
 Description=Apache httpd Server Configuration Autodiscovery
 ReloadPropagatedFrom=httpd.service
 Before=httpd@.service
-After=firewalld.service
 
 [Service]
 Type=oneshot

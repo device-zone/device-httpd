@@ -203,13 +203,13 @@ EnableSendfile on
 # Supplemental configuration
 #
 # Load config files in the "/etc/httpd/conf.d" directory, if any.
-IncludeOptional conf.d/device-${instance}/*.conf
+IncludeOptional conf.device.d/${instance}/*.conf
 
 
 EOF
 
   install -m 640 "device-${instance}.conf" "/etc/httpd/conf/device-${instance}.conf"
-  install -d 0750 "/etc/httpd/conf.d/device-${instance}"
+  install -d 0750 "/etc/httpd/conf.device.d/${instance}"
 
 }
 
@@ -220,7 +220,7 @@ remove_instance() {
   instance="${1}"
 
   rm -f "/etc/httpd/conf/device-${instance}.conf"
-  rm -rf "/etc/httpd/conf.d/device-${instance}"
+  rm -rf "/etc/httpd/conf.device.d/${instance}"
 }
 
 
@@ -281,15 +281,6 @@ while read line; do
 
   # add new instances
   elif test -f "$line/added"; then
-
-    # instance already exist and we're told to add? none of our business, remove the device config for safety
-    if test -d "/etc/httpd/device-${instance}"; then
-
-      logger -t httpd-autodiscovery "'/etc/httpd/device-${instance}' already exists, ignoring '$line'"
-      echo "Webserver ${instance} already exists" > ${line}/error
-
-      continue;
-    fi
 
     logger -t httpd-autodiscovery "creating httpd server instance ${instance}..."
     create_instance "${instance}"
