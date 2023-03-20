@@ -120,6 +120,9 @@ EOF
   if test -n "${tlslisten}"; then
 
     cat >> "secure-${virtualhost}.conf" <<- EOF
+<IfModule !log_config_module>
+  LoadModule log_config_module modules/mod_log_config.so
+</IfModule>
 <IfModule !ssl_module>
   LoadModule ssl_module modules/mod_ssl.so
 </IfModule>
@@ -127,6 +130,10 @@ EOF
 #
 # Secure virtual host
 <VirtualHost ${tlslisten}>
+
+  LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\" \"%{SSL_CLIENT_S_DN}x\" \"%{SSL_CLIENT_I_DN}x\"" ssl-combined
+  ErrorLog /var/log/httpd/device-${instance}-secure-${virtualhost}-error_log
+  CustomLog /var/log/httpd/device-${instance}-secure-${virtualhost}-access_log ssl-combined
 
 EOF
 
@@ -201,6 +208,8 @@ EOF
 
   install -m 640 "virtual-${virtualhost}.conf" "/etc/httpd/conf.device.d/instance/${instance}/virtual-${virtualhost}.conf"
   install -m 640 "secure-${virtualhost}.conf" "/etc/httpd/conf.device.d/instance/${instance}/secure-${virtualhost}.conf"
+  rm -rf "/etc/httpd/conf.device.d/instance/${instance}/virtual-${virtualhost}.d/"
+  rm -rf "/etc/httpd/conf.device.d/instance/${instance}/secure-${virtualhost}.d/"
   install -d 0750 "/etc/httpd/conf.device.d/instance/${instance}/virtual-${virtualhost}.d/"
   install -d 0750 "/etc/httpd/conf.device.d/instance/${instance}/secure-${virtualhost}.d/"
 
@@ -269,7 +278,6 @@ if [ $# -eq 2 ]; then
 
       logger -t httpd-autodiscovery "creating virtualhost in httpd server instance ${instance}..."
       enable_instance "${instance}" "${virtualhost}" "${line}"
-      run_scripts "${instance}" "${virtualhost}" "${line}"
       logger -t httpd-autodiscovery "created virtualhost in httpd server instance ${instance}."
 
       rm -f "$line/updated"

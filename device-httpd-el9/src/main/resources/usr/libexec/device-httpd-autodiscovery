@@ -48,7 +48,9 @@ Group apache
     Require all denied
 </Directory>
 
+LoadModule authn_core_module modules/mod_authn_core.so
 LoadModule authz_core_module modules/mod_authz_core.so
+LoadModule dir_module modules/mod_dir.so
 LoadModule systemd_module modules/mod_systemd.so
 LoadModule unixd_module modules/mod_unixd.so
 
