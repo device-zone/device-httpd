@@ -61,6 +61,20 @@ enable_instance() {
     tlscacerts=$(readlink -f "$line/tls-ca-certs.crt")
   fi
 
+  install -m 2770 -g apache -d "/var/www/instance/${instance}"
+  install -m 2770 -g apache -d "/var/www/instance/${instance}/secure"
+  install -m 2770 -g apache -d "/var/www/instance/${instance}/secure/${virtualhost}"
+  install -m 2770 -g apache -d "/var/www/instance/${instance}/secure/${virtualhost}/web-docs"
+  install -m 2770 -g apache -d "/var/www/instance/${instance}/virtual"
+  install -m 2770 -g apache -d "/var/www/instance/${instance}/virtual/${virtualhost}"
+  install -m 2770 -g apache -d "/var/www/instance/${instance}/virtual/${virtualhost}/web-docs"
+
+  semanage fcontext -a -t httpd_sys_rw_content_t "/var/www/instance/${instance}/secure/${virtualhost}/web-docs(/.*)?"
+  semanage fcontext -a -t httpd_sys_rw_content_t "/var/www/instance/${instance}/virtual/${virtualhost}/web-docs(/.*)?"
+
+  restorecon -R "/var/www/instance/${instance}/secure/${virtualhost}/web-docs"
+  restorecon -R "/var/www/instance/${instance}/virtual/${virtualhost}/web-docs"
+
   if test -n "${tlslisten}"; then
 
     install -m 750 -d "/run/httpd/device-${instance}"
@@ -131,6 +145,7 @@ EOF
 # Secure virtual host
 <VirtualHost ${tlslisten}>
 
+  DocumentRoot "/var/www/instance/${instance}/secure/${virtualhost}/web-docs"
   LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\" \"%{SSL_CLIENT_S_DN}x\" \"%{SSL_CLIENT_I_DN}x\"" ssl-combined
   ErrorLog /var/log/httpd/device-${instance}-secure-${virtualhost}-error_log
   CustomLog /var/log/httpd/device-${instance}-secure-${virtualhost}-access_log ssl-combined
@@ -182,6 +197,8 @@ EOF
 # Open virtual host
 <VirtualHost ${listen}>
 
+  DocumentRoot "/var/www/instance/${instance}/virtual/${virtualhost}/web-docs"
+
 EOF
 
     if test -n "${servername}"; then
@@ -222,6 +239,9 @@ EOF
 disable_instance() {
   instance="${1}"
   virtualhost="${2}"
+
+  semanage fcontext -d -t httpd_sys_rw_content_t "/var/www/instance/${instance}/secure/${virtualhost}/web-docs(/.*)?"
+  semanage fcontext -d -t httpd_sys_rw_content_t "/var/www/instance/${instance}/virtual/${virtualhost}/web-docs(/.*)?"
 
   rm -f "/etc/httpd/conf.device.d/instance/${instance}/virtual-${virtualhost}.conf"
   rm -f "/etc/httpd/conf.device.d/instance/${instance}/secure-${virtualhost}.conf"
