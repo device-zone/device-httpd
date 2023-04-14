@@ -67,6 +67,7 @@ if [ $# -eq 3 ]; then
 
     IndexOptions FancyIndexing HTMLTable VersionSort XHTML
     DirectoryIndex disabled
+    FileETag INode MTime Size
 
 #    HeaderName /storage-assets/HEADER.html
 #    ReadmeName /storage-assets/FOOTER.html
