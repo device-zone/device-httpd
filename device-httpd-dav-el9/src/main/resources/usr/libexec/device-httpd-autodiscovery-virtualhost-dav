@@ -52,11 +52,13 @@ if [ $# -eq 3 ]; then
 <IfModule !dav_fs_module>
   LoadModule dav_fs_module modules/mod_dav_fs.so
 </IfModule>
+<IfModule !dir_module>
+  LoadModule dir_module modules/mod_dir.so
+</IfModule>
 
 # DAV configured from ${line}/path.txt
   <Location ${path}>
     Alias ${directory}
-    DirectoryIndex disabled
   </Location>
 
   <Directory ${directory}>
@@ -64,6 +66,7 @@ if [ $# -eq 3 ]; then
     Options +Indexes
 
     IndexOptions FancyIndexing HTMLTable VersionSort XHTML
+    DirectoryIndex disabled
 
 #    HeaderName /storage-assets/HEADER.html
 #    ReadmeName /storage-assets/FOOTER.html
