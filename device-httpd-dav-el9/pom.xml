@@ -153,7 +153,9 @@
           -->
           <requires>
             <require>mod_dav</require>
+            <require>mod_ldap</require>
             <require>device-httpd</require>
+            <require>recode</require>
           </requires>
         </configuration>
       </plugin>

@@ -3,7 +3,7 @@
 set -e
 umask 0002
 
-OPTIONS="--set name --hostname name --polar disabled --required --url-path-absolute path --relation-base /etc/device/services/www/virtualhost --relation-name name --relation-suffix .txt --relation virtualhost --symlink-base /var/www/dav/ --symlink directory"
+OPTIONS="--set name --hostname name --polar disabled --text access-url --relation-base /etc/device/services/ldap/suffix --relation-name name --relation-suffix .txt --relation ldap-suffix --distinguished-name ldap-group --required --url-path-absolute path --relation-base /etc/device/services/www/virtualhost --relation-name name --relation-suffix .txt --relation virtualhost --symlink-base /var/www/dav/ --symlink directory"
 
 if [ "$1" == "--" ]; then
 
