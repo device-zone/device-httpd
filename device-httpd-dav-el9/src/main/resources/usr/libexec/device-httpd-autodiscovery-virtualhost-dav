@@ -116,6 +116,7 @@ EOF
     if test -L "$line/ldap-suffix.d"; then
       if test -n "${ldap_instance}" -a -n "${ldap_suffix}"; then
         cat >> "device-${instance}-${virtualhost}-${location}.conf" <<- EOF
+      LDAPBind mechanism EXTERNAL
       AuthLDAPURL ldapi://%2frun%2fslapd-${ldap_instance}.socket/${ldap_suffix}?uid,inetSubscriberAccountId?sub?inetSubscriberAccountId=*
 EOF
         if test -n "${ldap_group}"; then
