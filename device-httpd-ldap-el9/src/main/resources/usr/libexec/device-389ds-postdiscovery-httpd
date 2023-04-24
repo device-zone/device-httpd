@@ -1,0 +1,84 @@
+#!/bin/bash
+
+#
+# 389 Directory Server Postdiscovery - apache user
+# ================================================
+#
+# This script adds apache user to instances.
+
+set -e
+
+instance="${1}"
+
+uris="ldapi://%2frun%2fslapd-${instance}.socket"
+
+
+#
+# Autogenerate the apache user
+# ----------------------------
+#
+# If the LDAP server is local, we need to create the apache user in
+# LDAP so autobind works.
+
+logger -t "${0}" "Notice: Adding apache user on instance '${instance}'..."
+
+dsidm -b "cn=config" ${uris} organizationalunit create --ou people >/dev/null || /bin/true
+
+dsidm -b "cn=config" ${uris} user create --uid apache --cn apache --displayName "Apache Server" --uidNumber `id -u apache` --gidNumber `id -g apache` --homeDirectory "`echo ~apache`" >/dev/null || /bin/true
+
+aci='(targetattr != "userPassword")(version 3.0;acl "Apache Daemon";allow (read,search,compare) (userdn = "ldap:///uid=apache,ou=people,cn=config");)'
+
+logger -t "${0}" "Notice: attempting to add apache aci on instance '${instance}'..."
+logger -t "${0}" "Notice: apache aci: ${aci}"
+
+find /etc/device/services/ldap/suffix/ -mindepth 1 -maxdepth 1 -type l | \
+while read line; do
+
+  target=$(readlink -f "$line")
+
+  if test ! -f "$line/suffix.txt"; then
+    continue;
+  fi
+  suffix="$(head $line/suffix.txt)"
+
+  if [ ! -e "$line/instance.d/name.txt" ]; then
+    continue;
+  fi
+  instance="$(head $line/instance.d/name.txt)"
+
+  if [ "${instance}" != "${1}" ]; then
+    continue;
+  fi
+
+  existing=$(ldapsearch -H ${uris} -Y EXTERNAL -b "${suffix}" -o ldif-wrap=no -s base "(aci=*)" aci | grep "ldap:///uid=apache,ou=people,cn=config" || /bin/true)
+
+  if [ -z "${existing}" ]; then
+
+    ldapmodify -H ${uris} -Y EXTERNAL -c <<- EOF || true
+dn: ${suffix}
+changetype: modify
+add: aci
+aci: ${aci}
+
+EOF
+
+  else
+
+    ldapmodify -H ${uris} -Y EXTERNAL -c <<- EOF || true
+dn: ${suffix}
+changetype: modify
+delete: aci
+${existing}
+-
+add: aci
+aci: ${aci}
+
+EOF
+
+  fi
+
+done
+
+logger -t "${0}" "Notice: Added apache user to local LDAP instance '${instance}'."
+
+

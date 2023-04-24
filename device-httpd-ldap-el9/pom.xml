@@ -16,12 +16,12 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
 
-  <artifactId>device-httpd-dav</artifactId>
+  <artifactId>device-httpd-ldap</artifactId>
   <groupId>zone.device.platform.el9</groupId>
   <version>0.9.0-SNAPSHOT</version>
   <packaging>rpm</packaging>
-  <name>device httpd dav applicance for el9</name>
-  <description>Packaging for the httpd dav appliance for ${release.distribution}</description>
+  <name>device httpd ldap applicance for el9</name>
+  <description>Packaging for the httpd ldap appliance for ${release.distribution}</description>
   <inceptionYear>2023</inceptionYear>
 
   <build>
@@ -83,81 +83,19 @@
           </defineStatements>
           <mappings>
             <mapping>
-              <directory>/usr/libexec/device-httpd-autodiscovery.d</directory>
+              <directory>/usr/libexec/device-389ds-postdiscovery.d</directory>
               <directoryIncluded>false</directoryIncluded>
               <filemode>755</filemode>
               <username>root</username>
               <groupname>root</groupname>
               <sources>
                 <source>
-                  <location>target/classes/usr/libexec/device-httpd-autodiscovery-dav</location>
-                  <destination>10-dav</destination>
-                </source>
-              </sources>
-            </mapping>
-            <mapping>
-              <directory>/usr/libexec/device-httpd-autodiscovery-virtualhost.d</directory>
-              <directoryIncluded>false</directoryIncluded>
-              <filemode>755</filemode>
-              <username>root</username>
-              <groupname>root</groupname>
-              <sources>
-                <source>
-                  <location>target/classes/usr/libexec/device-httpd-autodiscovery-virtualhost-dav</location>
-                  <destination>10-dav</destination>
-                </source>
-              </sources>
-            </mapping>
-            <mapping>
-              <directory>/etc/device/services/www/dav</directory>
-              <directoryIncluded>true</directoryIncluded>
-              <filemode>2775</filemode>
-              <username>root</username>
-              <groupname>device</groupname>
-            </mapping>
-            <mapping>
-              <directory>/usr/libexec/device/services/www/dav</directory>
-              <directoryIncluded>true</directoryIncluded>
-              <filemode>755</filemode>
-              <username>root</username>
-              <groupname>root</groupname>
-            </mapping>
-            <mapping>
-              <directory>/usr/libexec/device/services/www/dav</directory>
-              <directoryIncluded>false</directoryIncluded>
-              <filemode>755</filemode>
-              <username>root</username>
-              <groupname>root</groupname>
-              <sources>
-                <source>
-                  <location>target/classes/usr/libexec/device/services/www/dav/add</location>
-                </source>
-                <source>
-                  <location>target/classes/usr/libexec/device/services/www/dav/remove</location>
-                </source>
-                <source>
-                  <location>target/classes/usr/libexec/device/services/www/dav/set</location>
+                  <location>target/classes/usr/libexec/device-389ds-postdiscovery-httpd</location>
+                  <destination>90-httpd</destination>
                 </source>
               </sources>
             </mapping>
           </mappings>
-          <postinstallScriptlet>
-            <scriptFile>target/classes/postinstall</scriptFile>
-            <fileEncoding>utf-8</fileEncoding>
-          </postinstallScriptlet>
-          <!--
-	  <preremoveScriptlet>
-            <scriptFile>target/classes/preremove</scriptFile>
-            <fileEncoding>utf-8</fileEncoding>
-	  </preremoveScriptlet>
-          -->
-          <requires>
-            <require>mod_dav</require>
-            <require>mod_ldap</require>
-            <require>device-httpd</require>
-            <require>device-httpd-ldap</require>
-            <require>recode</require>
-          </requires>
         </configuration>
       </plugin>
     </plugins>
