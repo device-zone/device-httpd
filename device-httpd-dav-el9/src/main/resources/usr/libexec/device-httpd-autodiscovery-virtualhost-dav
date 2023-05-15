@@ -36,20 +36,10 @@ if [ $# -eq 3 ]; then
       path="/"
     fi
 
-    # ldap instance if present
-    ldap_instance=""
-    if test -f "$line/ldap-suffix.d/instance.d/name.txt"; then
-      ldap_instance="$(head -n 1 $line/ldap-suffix.d/instance.d/name.txt)"
-    fi
-    # ldap suffix if present
-    ldap_suffix=""
-    if test -f "$line/ldap-suffix.d/suffix.txt"; then
-      ldap_suffix="$(head -n 1 $line/ldap-suffix.d/suffix.txt)"
-    fi
-    # ldap group if present
-    ldap_group=""
-    if test -f "$line/ldap-group.txt"; then
-      ldap_group="$(head -n 1 ${line}/ldap-group.txt)"
+    # read auth if present
+    authname=""
+    if test -f "$line/auth.d/name.txt"; then
+      authname="$(head -n 1 $line/auth.d/name.txt)"
     fi
 
     # access url if present
@@ -70,8 +60,8 @@ if [ $# -eq 3 ]; then
 <IfModule !alias_module>
   LoadModule alias_module modules/mod_alias.so
 </IfModule>
-<IfModule !authz_user_module>
-  LoadModule authz_user_module modules/mod_authz_user.so
+<IfModule !authz_core_module>
+  LoadModule authz_core_module modules/mod_authz_core.so
 </IfModule>
 <IfModule !autoindex_module>
   LoadModule autoindex_module modules/mod_autoindex.so
@@ -113,36 +103,19 @@ if [ $# -eq 3 ]; then
 
 EOF
 
-    if test -L "$line/ldap-suffix.d"; then
-      if test -n "${ldap_instance}" -a -n "${ldap_suffix}"; then
-        cat >> "device-${instance}-${virtualhost}-${location}.conf" <<- EOF
-      LDAPBind mechanism EXTERNAL
-      AuthLDAPURL ldapi://%2frun%2fslapd-${ldap_instance}.socket/${ldap_suffix}?uid,inetSubscriberAccountId?sub?inetSubscriberAccountId=*
-EOF
-        if test -n "${ldap_group}"; then
-          cat >> "device-${instance}-${virtualhost}-${location}.conf" <<- EOF
-      require ldap-group ${ldap_group}
+    if test -n "${authname}"; then
+      cat >> "device-${instance}-${virtualhost}-${location}.conf" <<- EOF
+      require device-${authname}
 
       ErrorDocument 403 "<html><head><title>403 Forbidden</title></head><body><h1>Forbidden</h1><p>Your gadget '%{SSL_CLIENT_S_DN_CN}' currently does not have permission to access this URL.${access_text}</p></body></html>"
 
 EOF
-        else
-          cat >> "device-${instance}-${virtualhost}-${location}.conf" <<- EOF
-      require valid-user
-EOF
-        fi
-      else
-        cat >> "device-${instance}-${virtualhost}-${location}.conf" <<- EOF
-      # ldap instance/suffix $line/ldap-suffix.d/instance.d/name.txt $line/ldap-suffix.d/suffix.txt specified, but does not exist - denying
+    else
+      cat >> "device-${instance}-${virtualhost}-${location}.conf" <<- EOF
+      # no authname specified, so access is denied
       require all denied
 
       ErrorDocument 403 "<html><head><title>403 Forbidden</title></head><body><h1>Forbidden</h1><p>Access is currently disabled for this URL space.</p></body></html>"
-EOF
-      fi
-    else
-      cat >> "device-${instance}-${virtualhost}-${location}.conf" <<- EOF
-      # by default, require a valid certificate
-      require valid-user
 EOF
     fi
 
