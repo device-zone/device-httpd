@@ -28,6 +28,7 @@
   <modules>
     <module>device-httpd-el9</module>
     <module>device-httpd-ldap-el9</module>
+    <module>device-httpd-bearer-el9</module>
     <module>device-httpd-auth-el9</module>
     <module>device-httpd-dav-el9</module>
   </modules>
