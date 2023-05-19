@@ -63,6 +63,7 @@ EOF
 <AuthzProviderAlias ldap-group device-${authname} "${ldap_group}">
   LDAPBind mechanism EXTERNAL
   AuthLDAPURL ldapi://%2frun%2fslapd-${ldap_instance}.socket/${ldap_suffix}?uid,inetSubscriberAccountId?sub?inetSubscriberAccountId=*
+  AuthLDAPRemoteUserAttribute inetSubscriberAccountId
 </AuthzProviderAlias>
 EOF
       else
@@ -81,6 +82,7 @@ EOF
 <AuthzProviderAlias valid-user device-${authname}>
   LDAPBind mechanism EXTERNAL
   AuthLDAPURL ldapi://%2frun%2fslapd-${ldap_instance}.socket/${ldap_suffix}?uid,inetSubscriberAccountId?sub?inetSubscriberAccountId=*
+  AuthLDAPRemoteUserAttribute inetSubscriberAccountId
 </AuthzProviderAlias>
 EOF
       else
