@@ -28,8 +28,8 @@ run_scripts() {
 
 
 #
-# Enable instance that does not yet exist
-enable_instance() {
+# Create instance that does not yet exist
+create_instance() {
   instance="${1}"
   virtualhost="${2}"
   line="${3}"
@@ -223,20 +223,27 @@ EOF
 
   fi
 
-  install -m 640 "virtual-${virtualhost}.conf" "/etc/httpd/conf.device.d/instance/${instance}/virtual-${virtualhost}.conf"
-  install -m 640 "secure-${virtualhost}.conf" "/etc/httpd/conf.device.d/instance/${instance}/secure-${virtualhost}.conf"
   rm -rf "/etc/httpd/conf.device.d/instance/${instance}/virtual-${virtualhost}.d/"
   rm -rf "/etc/httpd/conf.device.d/instance/${instance}/secure-${virtualhost}.d/"
   install -d 0750 "/etc/httpd/conf.device.d/instance/${instance}/virtual-${virtualhost}.d/"
   install -d 0750 "/etc/httpd/conf.device.d/instance/${instance}/secure-${virtualhost}.d/"
 
   run_scripts "${instance}" "${virtualhost}" "${line}"
+
+  if test -f "$line/disabled.bin"; then
+    install -m 640 "virtual-${virtualhost}.conf" "/etc/httpd/conf.device.d/instance/${instance}/virtual-${virtualhost}.conf-disabled"
+    install -m 640 "secure-${virtualhost}.conf" "/etc/httpd/conf.device.d/instance/${instance}/secure-${virtualhost}.conf-disabled"
+  else
+    install -m 640 "virtual-${virtualhost}.conf" "/etc/httpd/conf.device.d/instance/${instance}/virtual-${virtualhost}.conf"
+    install -m 640 "secure-${virtualhost}.conf" "/etc/httpd/conf.device.d/instance/${instance}/secure-${virtualhost}.conf"
+  fi
+
 }
 
 
 #
-# Disable existing virtualhost
-disable_instance() {
+# Remove instance that exists
+remove_instance() {
   instance="${1}"
   virtualhost="${2}"
 
@@ -276,7 +283,7 @@ if [ $# -eq 2 ]; then
     if test -f "$line/removed"; then
 
       logger -t httpd-autodiscovery "removing virtualhost from httpd server instance ${instance}..."
-      disable_instance "${instance}" "${virtualhost}"
+      remove_instance "${instance}" "${virtualhost}"
       logger -t httpd-autodiscovery "removed virtualhost from httpd server instance ${instance}."
 
       # remove folder
@@ -284,23 +291,32 @@ if [ $# -eq 2 ]; then
       rmdir "${target}"
       rm -f "${line}"
 
-    # update to disabled state
-    elif test -f "$line/disabled.bin"; then
+    # add new instances
+    elif test -f "$line/added"; then
 
-      logger -t httpd-autodiscovery "disabling virtualhost from httpd server instance ${instance}..."
-      disable_instance "${instance}" "${virtualhost}"
-      logger -t httpd-autodiscovery "disabled virtualhost from httpd server instance ${instance}."
+      logger -t httpd-autodiscovery "creating virtualhost in httpd server instance ${instance}..."
+      create_instance "${instance}" "${virtualhost}" "${line}"
+      logger -t httpd-autodiscovery "created virtualhost in httpd server instance ${instance}."
 
       rm -f "$line/added"
+
+    # update instances
+    elif test -f "$line/updated"; then
+
+      logger -t httpd-autodiscovery "updating virtualhost in httpd server instance ${instance}..."
+      remove_instance "${instance}" "${virtualhost}"
+      create_instance "${instance}" "${virtualhost}" "${line}"
+      logger -t httpd-autodiscovery "updated virtualhost in httpd server instance ${instance}."
+
+      rm -f "$line/updated"
 
     # update to enabled state
     else
 
-      logger -t httpd-autodiscovery "creating virtualhost in httpd server instance ${instance}..."
-      enable_instance "${instance}" "${virtualhost}" "${line}"
-      logger -t httpd-autodiscovery "created virtualhost in httpd server instance ${instance}."
-
-      rm -f "$line/updated"
+      logger -t httpd-autodiscovery "updating virtualhost in httpd server instance ${instance}..."
+      remove_instance "${instance}" "${virtualhost}" 
+      create_instance "${instance}" "${virtualhost}" "${line}"
+      logger -t httpd-autodiscovery "updated virtualhost in httpd server instance ${instance}."
 
     fi
 
