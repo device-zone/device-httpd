@@ -270,7 +270,6 @@ while read line; do
 
     logger -t httpd-autodiscovery "removing httpd server instance ${instance}..."
 
-    systemctl disable "httpd@device-${instance}"
     systemctl stop "httpd@device-${instance}"
 
     remove_instance "${instance}"
@@ -291,12 +290,10 @@ while read line; do
 
     if test -f "$line/disabled.bin"; then
 
-      systemctl disable "httpd@device-${instance}"
       systemctl stop "httpd@device-${instance}"
 
     else
 
-      systemctl enable "httpd@device-${instance}"
       systemctl start "httpd@device-${instance}"
 
     fi
@@ -310,7 +307,6 @@ while read line; do
 
     if test -f "$line/disabled.bin"; then
 
-      systemctl disable "httpd@device-${instance}"
       systemctl stop "httpd@device-${instance}"
 
       run_scripts "${instance}" "${line}"
@@ -319,8 +315,7 @@ while read line; do
 
       run_scripts "${instance}" "${line}"
 
-      systemctl enable "httpd@device-${instance}"
-      systemctl start "httpd@device-${instance}"
+      systemctl reload-or-restart "httpd@device-${instance}"
 
     fi
 
@@ -331,9 +326,13 @@ while read line; do
 
     instance="$(head $line/name.txt)"
 
-    run_scripts "${instance}" "${line}"
+    if test ! -f "$line/disabled.bin"; then
 
-    systemctl try-reload-or-restart "httpd@device-${instance}"
+      run_scripts "${instance}" "${line}"
+
+      systemctl reload-or-restart "httpd@device-${instance}"
+
+    fi
 
   fi
 

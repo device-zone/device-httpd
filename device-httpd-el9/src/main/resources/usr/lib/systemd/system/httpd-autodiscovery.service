@@ -3,7 +3,6 @@
 [Unit]
 Description=Apache httpd Server Configuration Autodiscovery
 ReloadPropagatedFrom=httpd.service
-Before=httpd@.service
 
 [Service]
 Type=oneshot
