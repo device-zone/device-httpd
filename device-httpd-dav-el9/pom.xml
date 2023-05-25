@@ -152,10 +152,8 @@
 	  </preremoveScriptlet>
           -->
           <requires>
-            <require>mod_dav</require>
-            <require>mod_ldap</require>
             <require>device-httpd</require>
-            <require>device-httpd-ldap</require>
+            <require>device-httpd-auth</require>
             <require>recode</require>
           </requires>
         </configuration>
