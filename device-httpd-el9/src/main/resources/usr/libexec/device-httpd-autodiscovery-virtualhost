@@ -161,6 +161,10 @@ EOF
 
     cat >> "secure-${virtualhost}.conf" <<- EOF
   SSLEngine on
+
+  SSLCipherSuite PROFILE=SYSTEM
+  SSLProxyCipherSuite PROFILE=SYSTEM
+
   SSLCertificateFile /run/httpd/device-${instance}/${virtualhost}.crt
   SSLCertificateKeyFile /run/httpd/device-${instance}/${virtualhost}.key
 
