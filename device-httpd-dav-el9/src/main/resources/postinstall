@@ -1,7 +1,7 @@
 if [ $1 = 1 ]; then
 
-  semanage fcontext -a -t httpd_sys_rw_content_t '/var/www/dav(/.*)?' 2>/dev/null
-  install -m 2770 -o root -g apache -d /var/www/dav
-  restorecon /var/www/dav
+  semanage fcontext -a -t httpd_sys_rw_content_t '/var/www/alias/dav(/.*)?' 2>/dev/null
+  install -m 2770 -o root -g apache -d /var/www/alias/dav
+  restorecon /var/www/alias/dav
 
 fi

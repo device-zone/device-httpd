@@ -140,17 +140,22 @@
                 </source>
               </sources>
             </mapping>
+            <mapping>
+              <directory>/var/www/alias/dav</directory>
+              <directoryIncluded>true</directoryIncluded>
+              <filemode>2750</filemode>
+              <username>root</username>
+              <groupname>apache</groupname>
+            </mapping>
           </mappings>
           <postinstallScriptlet>
             <scriptFile>target/classes/postinstall</scriptFile>
             <fileEncoding>utf-8</fileEncoding>
           </postinstallScriptlet>
-          <!--
 	  <preremoveScriptlet>
             <scriptFile>target/classes/preremove</scriptFile>
             <fileEncoding>utf-8</fileEncoding>
 	  </preremoveScriptlet>
-          -->
           <requires>
             <require>device-httpd</require>
             <require>device-httpd-auth</require>
