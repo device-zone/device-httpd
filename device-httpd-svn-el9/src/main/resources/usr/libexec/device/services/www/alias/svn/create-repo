@@ -1,0 +1,27 @@
+#!/bin/sh
+  
+set -e
+umask 0002
+
+tmpdir="$(mktemp -d)"
+trap 'rm -rf -- "${tmpdir}"' EXIT
+
+# --symlink-context-type httpd_sys_rw_content_t 
+
+if [ "$1" == "--" ]; then
+
+  reponame=$(basename "$2")
+
+  if expr match "$reponame" ^[.] > /dev/null; then
+    echo "${reponame} cannot start with a dot."
+  elif test -e "/var/www/alias/svn/${reponame}"; then
+    echo "${reponame} already exists."
+  else
+    /usr/bin/sudo -u apache -g apache /usr/bin/svnadmin create "/var/www/alias/svn/${reponame}"
+    /usr/bin/sudo -u apache -g apache chmod 2770 -R "/var/www/alias/svn/${reponame}"
+    /usr/bin/sudo /usr/sbin/restorecon -R "/var/www/alias/svn/${reponame}"
+  fi
+
+fi
+
+
