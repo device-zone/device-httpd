@@ -127,4 +127,49 @@ To remove a virtualhost called "seawitch", run this.
 [root@server ~]# device services www virtualhost remove seawitch
 ```
 
+# device-httpd-auth
+Provides an Apache webserver authentication extension, authenticated using TLS mutual authentication,
+and backed by LDAP.
+
+This appliance does the following:
+
+- All parameters passed to the device commands are syntax checked and canonicalised, with bash completion.
+- Integrates with the 389ds appliance.
+- Defines authentication requirements based on TLS mutual authentication, where the certificate
+  is required to be present and valid, or additionally the certificate mapped to an LDAP group.
+- Zero Trust configuration.
+
+Note: while the webserver is capable of supporting many types of authentication, this appliance
+provides the safest option of all of them, and actively excludes the others. If you have different
+requirements, it is expected that the device-httpd-auth appliance be swapped out for a more
+specialised one.
+
+With this appliance, the default behaviour is safe behaviour.
+
+Once an authentication requirement is defined, it is referred to be other appliance extensions.
+
+## before
+
+- Deploy the device-httpd-auth package.
+
+```
+[root@server ~]# dnf install device-httpd-auth
+```
+
+## add auth
+
+To add an authorisation definition called "administrators", run this.
+
+```
+[root@server ~]# device services www auth add name=administrators ldap-suffix=seawitch-example ldap-group="cn=admins,ou=Groups,dc=example,dc=com"
+```
+
+## remove auth
+
+To remove an authorisation definition called "administrators", run this.
+
+```
+[root@server ~]# device services www auth remove administrators
+```
+
 
