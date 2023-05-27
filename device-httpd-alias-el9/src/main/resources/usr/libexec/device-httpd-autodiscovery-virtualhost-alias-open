@@ -8,7 +8,7 @@ if [ $# -eq 3 ]; then
   #
   # Handle alias open locations
 
-  # find /etc/device/services/www/alias/open/ -mindepth 1 -maxdepth 1 -type l
+  # find /etc/device/services/www/open/alias/ -mindepth 1 -maxdepth 1 -type l
   while read line; do
 
     if test ! -f "$line/virtualhost.d/listen.d/instance.d/name.txt" -o "${instance}" != "$(head -n 1 $line/virtualhost.d/listen.d/instance.d/name.txt)"; then
@@ -132,7 +132,7 @@ EOF
 
     install "location.conf" "/etc/httpd/conf.device.d/instance/${instance}/secure-${virtualhost}.d/location-$(echo ${path} | tr [:cntrl:][:punct:] _).conf"
 
-  done < <(find /etc/device/services/www/alias/open/ -mindepth 1 -maxdepth 1 -type l)
+  done < <(find /etc/device/services/www/open/alias/ -mindepth 1 -maxdepth 1 -type l)
 
 fi
 

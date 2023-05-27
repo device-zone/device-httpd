@@ -8,7 +8,7 @@ if [ $# -eq 3 ]; then
   #
   # Handle svn locations
   
-  # find /etc/device/services/www/alias/svn/ -mindepth 1 -maxdepth 1 -type l
+  # find /etc/device/services/www/safe/svn/ -mindepth 1 -maxdepth 1 -type l
   while read line; do
 
     if test ! -f "$line/name.txt"; then
@@ -17,7 +17,7 @@ if [ $# -eq 3 ]; then
     aliassvn="$(head -n 1 ${line}/name.txt)"
  
     if test -f "$line/disabled.bin"; then
-      logger -t $0 "SVN alias disabled, ignoring: ${aliassvn}"
+      logger -t $0 "SVN safe alias disabled, ignoring: ${aliassvn}"
       continue;
     fi
  
@@ -64,9 +64,6 @@ if [ $# -eq 3 ]; then
 # DO NOT MODIFY THIS FILE - it will be overwritten on server restart.
 #
 
-<IfModule !alias_module>
-  LoadModule alias_module modules/mod_alias.so
-</IfModule>
 <IfModule !authz_core_module>
   LoadModule authz_core_module modules/mod_authz_core.so
 </IfModule>
@@ -79,56 +76,56 @@ if [ $# -eq 3 ]; then
 
 # DAV configured from ${line}/path.txt
 
-  <Location ${path}>
-    Dav svn
-    SVNPath ${directory}
-    Options +Indexes
+<Location ${path}>
+  Dav svn
+  SVNPath ${directory}
+  Options +Indexes
 
-    IndexOptions FancyIndexing HTMLTable VersionSort XHTML
-    DirectoryIndex disabled
-    FileETag INode MTime Size
+  IndexOptions FancyIndexing HTMLTable VersionSort XHTML
+  DirectoryIndex disabled
+  FileETag INode MTime Size
 
 #    HeaderName /storage-assets/HEADER.html
 #    ReadmeName /storage-assets/FOOTER.html
 
-    AuthzSendForbiddenOnFailure on
+  AuthzSendForbiddenOnFailure on
 
-    <If "%{SSL_CLIENT_VERIFY} == 'SUCCESS' || %{SSL_CLIENT_VERIFY} == 'GENEROUS'">
+  <If "%{SSL_CLIENT_VERIFY} == 'SUCCESS' || %{SSL_CLIENT_VERIFY} == 'GENEROUS'">
 
-      SSLUserName SSL_CLIENT_CERT_RFC4523_CEA
+    SSLUserName SSL_CLIENT_CERT_RFC4523_CEA
 
 EOF
 
     if test -n "${authname}"; then
       cat >> "device-${instance}-${virtualhost}-${location}.conf" <<- EOF
-      require device-${authname}
+    require device-${authname}
 
-      ErrorDocument 403 "<html><head><title>403 Forbidden</title></head><body><h1>Forbidden</h1><p>Your gadget '%{SSL_CLIENT_S_DN_CN}' currently does not have permission to access this URL.${access_text}</p></body></html>"
+    ErrorDocument 403 "<html><head><title>403 Forbidden</title></head><body><h1>Forbidden</h1><p>Your gadget '%{SSL_CLIENT_S_DN_CN}' currently does not have permission to access this URL.${access_text}</p></body></html>"
 
 EOF
     else
       cat >> "device-${instance}-${virtualhost}-${location}.conf" <<- EOF
-      # no authname specified, so access is denied
-      require all denied
+    # no authname specified, so access is denied
+    require all denied
 
-      ErrorDocument 403 "<html><head><title>403 Forbidden</title></head><body><h1>Forbidden</h1><p>Access is currently disabled for this URL space.</p></body></html>"
+    ErrorDocument 403 "<html><head><title>403 Forbidden</title></head><body><h1>Forbidden</h1><p>Access is currently disabled for this URL space.</p></body></html>"
 EOF
     fi
 
     cat >> "device-${instance}-${virtualhost}-${location}.conf" <<- EOF
-    </If>
-    <Else>
-      require all denied
+  </If>
+  <Else>
+    require all denied
 
-      ErrorDocument 403 "<html><head><title>403 Forbidden</title></head><body><h1>Forbidden</h1><p>A digital certificate is required to access this URL, but none was provided. Did you click cancel?${access_text}</p></body></html>"
+    ErrorDocument 403 "<html><head><title>403 Forbidden</title></head><body><h1>Forbidden</h1><p>A digital certificate is required to access this URL, but none was provided. Did you click cancel?${access_text}</p></body></html>"
 
-    </Else>
-  </Location>
+  </Else>
+</Location>
 EOF
 
     install "device-${instance}-${virtualhost}-${location}.conf" "/etc/httpd/conf.device.d/instance/${instance}/secure-${virtualhost}.d/location-$(echo ${path} | tr [:cntrl:][:punct:] _).conf"
 
-  done < <(find /etc/device/services/www/alias/svn/ -mindepth 1 -maxdepth 1 -type l)
+  done < <(find /etc/device/services/www/safe/svn/ -mindepth 1 -maxdepth 1 -type l)
 
 fi
 

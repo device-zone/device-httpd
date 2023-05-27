@@ -94,72 +94,65 @@
                   <destination>20-alias-open</destination>
                 </source>
                 <source>
-                  <location>target/classes/usr/libexec/device-httpd-autodiscovery-virtualhost-alias-locked</location>
-                  <destination>10-alias-locked</destination>
+                  <location>target/classes/usr/libexec/device-httpd-autodiscovery-virtualhost-alias-safe</location>
+                  <destination>10-alias-safe</destination>
                 </source>
               </sources>
             </mapping>
             <mapping>
-              <directory>/etc/device/services/www/alias</directory>
+              <directory>/etc/device/services/www/open/alias</directory>
               <directoryIncluded>true</directoryIncluded>
               <filemode>2775</filemode>
               <username>root</username>
               <groupname>device</groupname>
             </mapping>
             <mapping>
-              <directory>/etc/device/services/www/alias/open</directory>
+              <directory>/etc/device/services/www/safe/alias</directory>
               <directoryIncluded>true</directoryIncluded>
               <filemode>2775</filemode>
               <username>root</username>
               <groupname>device</groupname>
             </mapping>
             <mapping>
-              <directory>/etc/device/services/www/alias/locked</directory>
-              <directoryIncluded>true</directoryIncluded>
-              <filemode>2775</filemode>
-              <username>root</username>
-              <groupname>device</groupname>
-            </mapping>
-            <mapping>
-              <directory>/usr/libexec/device/services/www/alias/open</directory>
+              <directory>/usr/libexec/device/services/www/open/alias</directory>
               <directoryIncluded>false</directoryIncluded>
               <filemode>755</filemode>
               <username>root</username>
               <groupname>root</groupname>
               <sources>
                 <source>
-                  <location>target/classes/usr/libexec/device/services/www/alias/open/add</location>
+                  <location>target/classes/usr/libexec/device/services/www/open/alias/add</location>
                 </source>
                 <source>
-                  <location>target/classes/usr/libexec/device/services/www/alias/open/remove</location>
+                  <location>target/classes/usr/libexec/device/services/www/open/alias/remove</location>
                 </source>
                 <source>
-                  <location>target/classes/usr/libexec/device/services/www/alias/open/set</location>
+                  <location>target/classes/usr/libexec/device/services/www/open/alias/set</location>
                 </source>
               </sources>
             </mapping>
             <mapping>
-              <directory>/usr/libexec/device/services/www/alias/locked</directory>
+              <directory>/usr/libexec/device/services/www/safe/alias</directory>
               <directoryIncluded>true</directoryIncluded>
               <filemode>755</filemode>
               <username>root</username>
               <groupname>root</groupname>
             </mapping>
             <mapping>
-              <directory>/usr/libexec/device/services/www/alias/locked</directory>
+              <directory>/usr/libexec/device/services/www/safe/alias</directory>
               <directoryIncluded>false</directoryIncluded>
               <filemode>755</filemode>
               <username>root</username>
               <groupname>root</groupname>
               <sources>
                 <source>
-                  <location>target/classes/usr/libexec/device/services/www/alias/locked/add</location>
+                  <location>target/classes/usr/libexec/device/services/www/safe/alias/add</location>
                 </source>
                 <source>
-                  <location>target/classes/usr/libexec/device/services/www/alias/locked/remove</location>
+                  <location>target/classes/usr/libexec/device/services/www/safe/alias/remove</location>
                 </source>
                 <source>
-                  <location>target/classes/usr/libexec/device/services/www/alias/locked/set</location>
+                  <location>target/classes/usr/libexec/device/services/www/safe/alias/set</location>
                 </source>
               </sources>
             </mapping>
@@ -171,13 +164,21 @@
               <groupname>apache</groupname>
             </mapping>
             <mapping>
-              <directory>/var/www/alias/locked</directory>
+              <directory>/var/www/alias/safe</directory>
               <directoryIncluded>true</directoryIncluded>
               <filemode>2750</filemode>
               <username>root</username>       
               <groupname>apache</groupname>
             </mapping> 
           </mappings>
+          <postinstallScriptlet>
+            <scriptFile>target/classes/postinstall</scriptFile>
+            <fileEncoding>utf-8</fileEncoding>
+          </postinstallScriptlet>
+          <preremoveScriptlet>
+            <scriptFile>target/classes/preremove</scriptFile>
+            <fileEncoding>utf-8</fileEncoding>
+          </preremoveScriptlet>
           <requires>
             <require>device-httpd</require>
             <require>device-httpd-auth</require>

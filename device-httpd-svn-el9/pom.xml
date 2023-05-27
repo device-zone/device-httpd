@@ -109,42 +109,42 @@
               </sources>
             </mapping>
             <mapping>
-              <directory>/etc/device/services/www/alias/svn</directory>
+              <directory>/etc/device/services/www/safe/svn</directory>
               <directoryIncluded>true</directoryIncluded>
               <filemode>2775</filemode>
               <username>root</username>
               <groupname>device</groupname>
             </mapping>
             <mapping>
-              <directory>/usr/libexec/device/services/www/alias/svn</directory>
+              <directory>/usr/libexec/device/services/www/safe/svn</directory>
               <directoryIncluded>true</directoryIncluded>
               <filemode>755</filemode>
               <username>root</username>
               <groupname>root</groupname>
             </mapping>
             <mapping>
-              <directory>/usr/libexec/device/services/www/alias/svn</directory>
+              <directory>/usr/libexec/device/services/www/safe/svn</directory>
               <directoryIncluded>false</directoryIncluded>
               <filemode>755</filemode>
               <username>root</username>
               <groupname>root</groupname>
               <sources>
                 <source>
-                  <location>target/classes/usr/libexec/device/services/www/alias/svn/add</location>
+                  <location>target/classes/usr/libexec/device/services/www/safe/svn/add</location>
                 </source>
                 <source>
-                  <location>target/classes/usr/libexec/device/services/www/alias/svn/remove</location>
+                  <location>target/classes/usr/libexec/device/services/www/safe/svn/remove</location>
                 </source>
                 <source>
-                  <location>target/classes/usr/libexec/device/services/www/alias/svn/set</location>
+                  <location>target/classes/usr/libexec/device/services/www/safe/svn/set</location>
                 </source>
                 <source>
-                  <location>target/classes/usr/libexec/device/services/www/alias/svn/create-repo</location>
+                  <location>target/classes/usr/libexec/device/services/www/safe/svn/create-repo</location>
                 </source>
 	      </sources>
             </mapping>
             <mapping>
-              <directory>/var/www/alias/svn</directory>
+              <directory>/var/www/safe/svn</directory>
               <directoryIncluded>true</directoryIncluded>
               <filemode>2770</filemode>
               <username>root</username>

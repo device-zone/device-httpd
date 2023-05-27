@@ -109,39 +109,39 @@
               </sources>
             </mapping>
             <mapping>
-              <directory>/etc/device/services/www/alias/dav</directory>
+              <directory>/etc/device/services/www/safe/dav</directory>
               <directoryIncluded>true</directoryIncluded>
               <filemode>2775</filemode>
               <username>root</username>
               <groupname>device</groupname>
             </mapping>
             <mapping>
-              <directory>/usr/libexec/device/services/www/alias/dav</directory>
+              <directory>/usr/libexec/device/services/www/safe/dav</directory>
               <directoryIncluded>true</directoryIncluded>
               <filemode>755</filemode>
               <username>root</username>
               <groupname>root</groupname>
             </mapping>
             <mapping>
-              <directory>/usr/libexec/device/services/www/alias/dav</directory>
+              <directory>/usr/libexec/device/services/www/safe/dav</directory>
               <directoryIncluded>false</directoryIncluded>
               <filemode>755</filemode>
               <username>root</username>
               <groupname>root</groupname>
               <sources>
                 <source>
-                  <location>target/classes/usr/libexec/device/services/www/alias/dav/add</location>
+                  <location>target/classes/usr/libexec/device/services/www/safe/dav/add</location>
                 </source>
                 <source>
-                  <location>target/classes/usr/libexec/device/services/www/alias/dav/remove</location>
+                  <location>target/classes/usr/libexec/device/services/www/safe/dav/remove</location>
                 </source>
                 <source>
-                  <location>target/classes/usr/libexec/device/services/www/alias/dav/set</location>
+                  <location>target/classes/usr/libexec/device/services/www/safe/dav/set</location>
                 </source>
               </sources>
             </mapping>
             <mapping>
-              <directory>/var/www/alias/dav</directory>
+              <directory>/var/www/safe/dav</directory>
               <directoryIncluded>true</directoryIncluded>
               <filemode>2750</filemode>
               <username>root</username>

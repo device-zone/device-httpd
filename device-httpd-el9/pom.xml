@@ -358,6 +358,20 @@
                 </source>
               </sources>
             </mapping>
+            <mapping>
+              <directory>/etc/device/services/www/open</directory>
+              <directoryIncluded>true</directoryIncluded>
+              <filemode>2775</filemode>
+              <username>root</username>
+              <groupname>device</groupname>
+            </mapping>
+            <mapping>
+              <directory>/etc/device/services/www/safe</directory>
+              <directoryIncluded>true</directoryIncluded>
+              <filemode>2775</filemode>
+              <username>root</username>
+              <groupname>device</groupname>
+            </mapping>
           </mappings>
           <postinstallScriptlet>
             <scriptFile>target/classes/postinstall</scriptFile>

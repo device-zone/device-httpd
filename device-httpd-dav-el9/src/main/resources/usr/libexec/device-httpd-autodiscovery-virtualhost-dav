@@ -8,7 +8,7 @@ if [ $# -eq 3 ]; then
   #
   # Handle dav locations
   
-  # find /etc/device/services/www/alias/dav/ -mindepth 1 -maxdepth 1 -type l
+  # find /etc/device/services/www/safe/dav/ -mindepth 1 -maxdepth 1 -type l
   while read line; do
 
     if test ! -f "$line/name.txt"; then
@@ -17,7 +17,7 @@ if [ $# -eq 3 ]; then
     aliasdav="$(head -n 1 ${line}/name.txt)"
  
     if test -f "$line/disabled.bin"; then
-      logger -t $0 "DAV alias disabled, ignoring: ${aliasdav}"
+      logger -t $0 "DAV safe alias disabled, ignoring: ${aliasdav}"
       continue;
     fi
  
@@ -139,7 +139,7 @@ EOF
 
     install "device-${instance}-${virtualhost}-${location}.conf" "/etc/httpd/conf.device.d/instance/${instance}/secure-${virtualhost}.d/location-$(echo ${path} | tr [:cntrl:][:punct:] _).conf"
 
-  done < <(find /etc/device/services/www/alias/dav/ -mindepth 1 -maxdepth 1 -type l)
+  done < <(find /etc/device/services/www/safe/dav/ -mindepth 1 -maxdepth 1 -type l)
 
 fi
 

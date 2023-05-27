@@ -1,0 +1,4 @@
+if [ $1 = 0 ]; then
+  semanage fcontext -d -t httpd_sys_rw_content_t '/var/www/open/alias(/.*)?' 2>/dev/null
+  semanage fcontext -d -t httpd_sys_rw_content_t '/var/www/safe/alias(/.*)?' 2>/dev/null
+fi
