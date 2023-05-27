@@ -157,14 +157,14 @@
               </sources>
             </mapping>
             <mapping>
-              <directory>/var/www/alias/open</directory>
+              <directory>/var/www/open/alias</directory>
               <directoryIncluded>true</directoryIncluded>
               <filemode>2750</filemode>
               <username>root</username>
               <groupname>apache</groupname>
             </mapping>
             <mapping>
-              <directory>/var/www/alias/safe</directory>
+              <directory>/var/www/safe/alias</directory>
               <directoryIncluded>true</directoryIncluded>
               <filemode>2750</filemode>
               <username>root</username>       
