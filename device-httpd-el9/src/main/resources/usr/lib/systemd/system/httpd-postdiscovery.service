@@ -9,8 +9,8 @@ After=firewalld.service
 
 [Service]
 Type=oneshot
-ExecStart=/bin/bash /usr/libexec/device-httpd-postdiscovery
-ExecReload=/bin/bash /usr/libexec/device-httpd-postdiscovery
+ExecStart=/bin/bash /usr/libexec/device-postdiscovery/httpd
+ExecReload=/bin/bash /usr/libexec/device-postdiscovery/httpd
 RemainAfterExit=on
 
 [Install]

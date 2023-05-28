@@ -111,7 +111,7 @@
               <groupname>root</groupname>
             </mapping>
             <mapping>
-              <directory>/usr/libexec/</directory>
+              <directory>/usr/libexec/device-autodiscovery</directory>
               <directoryIncluded>false</directoryIncluded>
               <filemode>755</filemode>
               <username>root</username>
@@ -119,23 +119,19 @@
               <sources>
                 <source>
                   <location>target/classes/usr/libexec/device-httpd-autodiscovery</location>
-                  <destination>device-httpd-autodiscovery</destination>
-                </source>
-                <source>
-                  <location>target/classes/usr/libexec/device-httpd-postdiscovery</location>
-                  <destination>device-httpd-postdiscovery</destination>
+                  <destination>httpd</destination>
                 </source>
               </sources>
             </mapping>
             <mapping>
-              <directory>/usr/libexec/device-httpd-autodiscovery.d</directory>
+              <directory>/usr/libexec/device-autodiscovery/httpd.d</directory>
               <directoryIncluded>true</directoryIncluded>
               <filemode>755</filemode>
               <username>root</username>
               <groupname>root</groupname>
             </mapping>
             <mapping>
-              <directory>/usr/libexec/device-httpd-autodiscovery.d</directory>
+              <directory>/usr/libexec/device-autodiscovery/httpd.d</directory>
               <directoryIncluded>false</directoryIncluded>
               <filemode>755</filemode>
               <username>root</username>
@@ -160,7 +156,7 @@
               </sources>
             </mapping>
             <mapping>
-              <directory>/usr/libexec/device-httpd-autodiscovery-virtualhost.d</directory>
+              <directory>/usr/libexec/device-autodiscovery/httpd-virtualhost.d</directory>
               <directoryIncluded>true</directoryIncluded>
               <filemode>755</filemode>
               <username>root</username>
@@ -168,7 +164,7 @@
             </mapping>
 	    <!--
 	    <mapping>
-              <directory>/usr/libexec/device-httpd-autodiscovery-virtualhost.d</directory>
+	      <directory>/usr/libexec/device-autodiscovery/httpd-virtualhost.d</directory>
               <directoryIncluded>false</directoryIncluded>
               <filemode>755</filemode>
               <username>root</username>
@@ -182,14 +178,27 @@
 	    </mapping>
             -->
             <mapping>
-              <directory>/usr/libexec/device-httpd-postdiscovery.d</directory>
+              <directory>/usr/libexec/device-postdiscovery</directory>
+              <directoryIncluded>false</directoryIncluded>
+              <filemode>755</filemode>
+              <username>root</username>
+              <groupname>root</groupname>
+              <sources>
+                <source>
+                  <location>target/classes/usr/libexec/device-httpd-postdiscovery</location>
+                  <destination>httpd</destination>
+                </source>
+              </sources>
+            </mapping>
+            <mapping>
+              <directory>/usr/libexec/device-postdiscovery/httpd.d</directory>
               <directoryIncluded>true</directoryIncluded>
               <filemode>755</filemode>
               <username>root</username>
               <groupname>root</groupname>
             </mapping>
             <mapping>
-              <directory>/usr/libexec/device-httpd-postdiscovery.d</directory>
+              <directory>/usr/libexec/device-postdiscovery/httpd.d</directory>
               <directoryIncluded>false</directoryIncluded>
               <filemode>755</filemode>
               <username>root</username>

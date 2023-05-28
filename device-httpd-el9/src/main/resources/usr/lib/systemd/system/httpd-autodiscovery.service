@@ -6,8 +6,8 @@ ReloadPropagatedFrom=httpd.service
 
 [Service]
 Type=oneshot
-ExecStart=/bin/bash /usr/libexec/device-httpd-autodiscovery
-ExecReload=/bin/bash /usr/libexec/device-httpd-autodiscovery
+ExecStart=/bin/bash /usr/libexec/device-autodiscovery/httpd
+ExecReload=/bin/bash /usr/libexec/device-autodiscovery/httpd
 RemainAfterExit=on
 
 [Install]

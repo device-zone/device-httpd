@@ -83,7 +83,7 @@
           </defineStatements>
           <mappings>
             <mapping>
-              <directory>/usr/libexec/device-httpd-autodiscovery.d</directory>
+              <directory>/usr/libexec/device-autodiscovery/httpd.d</directory>
               <directoryIncluded>false</directoryIncluded>
               <filemode>755</filemode>
               <username>root</username>
@@ -96,7 +96,7 @@
               </sources>
             </mapping>
             <mapping>
-              <directory>/usr/libexec/device-httpd-autodiscovery-virtualhost.d</directory>
+              <directory>/usr/libexec/device-autodiscovery/httpd-virtualhost.d</directory>
               <directoryIncluded>false</directoryIncluded>
               <filemode>755</filemode>
               <username>root</username>

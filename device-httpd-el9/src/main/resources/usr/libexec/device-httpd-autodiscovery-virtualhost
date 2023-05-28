@@ -13,7 +13,7 @@ run_scripts() {
 
   rm -f "${line}/warning"
 
-  find "/usr/libexec/device-httpd-autodiscovery-virtualhost.d" -type f -executable | sort | \
+  find "/usr/libexec/device-autodiscovery/httpd-virtualhost.d" -type f -executable | sort | \
   while read x; do
     "$x" "${instance}" "${virtualhost}" "${line}" < /dev/null || touch error;
   done
