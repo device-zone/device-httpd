@@ -185,6 +185,8 @@ Open content can be configured allow access without authentication.
 
 Safe content forces the specification of an authentication scheme. Safe content attempts to protect against potential misconfiguration where sensitive content is accidentally stripped of authentication. Care must still be taken to ensure the authentication scheme is meaningful.
 
+Open and safe content is served from /var/www/open/alias and /var/www/safe/alias respectively, the idea being that by clearly separating the content, it is made more unlikely that safe content is accidentally made open. Symbolic links are followed, so care must be taken to ensure that symbolic links don't link safe data into the open URL space.
+
 ## before
 
 - Deploy the device-httpd-alias package.
