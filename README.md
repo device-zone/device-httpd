@@ -236,7 +236,7 @@ To remove an open alias called "docs", run this.
 [root@server ~]# device services www open alias remove docs
 ```
 
-# device-httpd-dave
+# device-httpd-dav
 Provides an Apache webserver WebDAV extension, allowing editable directories to be mapped into the URL space.
 
 This appliance does the following:
