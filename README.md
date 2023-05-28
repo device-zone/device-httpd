@@ -273,4 +273,50 @@ To remove a safe WebDAV location called "photos", run this.
 [root@server ~]# device services www safe dav remove photos
 ```
 
+# device-httpd-svn
+Provides an Apache webserver subversion extension, allowing subversion repositories to be mapped into the URL space.
+
+This appliance does the following:
+
+- All parameters passed to the device commands are syntax checked and canonicalised, with bash completion.
+- Allows subversion repositories to be mapped into the URL space editable using WebDAV.
+- Zero Trust configuration.
+
+## before
+
+- Deploy the device-httpd-svn package.
+
+```
+[root@server ~]# dnf install device-httpd-svn
+```
+
+## create repository
+
+To create a repository called invoices below /var/www/safe/svn, run this.
+
+```
+[root@server ~]# device services www safe svn create-repo "invoices"
+```
+
+## add safe svn
+
+To add a safe subversion location called "invoices", run this.
+
+```
+[root@server ~]# device services www safe svn add name=invoices virtualhost=seawitch auth=accounts path=/invoices directory=invoices
+```
+
+The auth option is mandatory.
+
+The repository is specified beneath /var/www/safe/svn, and can be a symbolic link to the real location on disk.
+
+## remove safe svn
+
+To remove a safe subversion repository called "invoices", run this.
+
+```
+[root@server ~]# device services www safe svn remove invoices
+```
+
+The repository will be removed from the URL space, but is not removed from the disk.
 
