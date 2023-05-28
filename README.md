@@ -183,7 +183,7 @@ This appliance does the following:
 
 Open content can be configured allow access without authentication.
 
-Safe content forces the specification of an authentication scheme. Safe content attempts to protect against potential misconfiguration where sensitive content is accidetally stripped of authentication. Care must still be taken to ensure the authentication scheme is meaningful.
+Safe content forces the specification of an authentication scheme. Safe content attempts to protect against potential misconfiguration where sensitive content is accidentally stripped of authentication. Care must still be taken to ensure the authentication scheme is meaningful.
 
 ## before
 
