@@ -172,4 +172,65 @@ To remove an authorisation definition called "administrators", run this.
 [root@server ~]# device services www auth remove administrators
 ```
 
+# device-httpd-alias
+Provides an Apache webserver alias extension, allowing directories to be mapped into the URL space.
+
+This appliance does the following:
+
+- All parameters passed to the device commands are syntax checked and canonicalised, with bash completion.
+- Splits content definitions between "open" content, where authorisation is optional, to "safe" content, where authorisation is mandatory, protecting against misconfiguration.
+- Zero Trust configuration.
+
+Open content can be configured allow access without authentication.
+
+Safe content forces the specification of an authentication scheme. Safe content attempts to protect against potential misconfiguration where sensitive content is accidetally stripped of authentication. Care must still be taken to ensure the authentication scheme is meaningful.
+
+## before
+
+- Deploy the device-httpd-alias package.
+
+```
+[root@server ~]# dnf install device-httpd-alias
+```
+
+## add safe alias
+
+To add an alias called "accounts", containing sensitive data, run this.
+
+```
+[root@server ~]# device services www safe alias add name=accounts virtualhost=seawitch auth=accounts path=/accounts directory=accounts
+```
+
+The auth option is mandatory.
+
+The directory is specified beneath /var/www/safe/alias, and can be a symbolic link to the real location on disk.
+
+## remove safe alias
+
+To remove a safe alias called "accounts", run this.
+
+```
+[root@server ~]# device services www safe alias remove accounts
+```
+
+## add open alias
+
+To add an open alias called "docs", containing unprotected data, run this.
+
+```
+[root@server ~]# device services www open alias add name=docs virtualhost=seawitch path=/docs directory=docs
+s
+```
+
+The auth option is optional.
+
+The directory is specified beneath /var/www/open/alias, and can be a symbolic link to the real location on disk.
+
+## remove open alias
+
+To remove an open alias called "docs", run this.
+
+```
+[root@server ~]# device services www open alias remove docs
+```
 
