@@ -303,7 +303,7 @@ To create a repository called invoices below /var/www/safe/svn, run this.
 To add a safe subversion location called "invoices", run this.
 
 ```
-[root@server ~]# device services www safe svn add name=invoices virtualhost=seawitch auth=accounts path=/invoices directory=invoices
+[root@server ~]# device services www safe svn add name=invoices virtualhost=seawitch auth=accounts path=/invoices repository=invoices
 ```
 
 The auth option is mandatory.

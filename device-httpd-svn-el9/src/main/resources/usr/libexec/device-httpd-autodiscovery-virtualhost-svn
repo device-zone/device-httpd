@@ -27,11 +27,11 @@ if [ $# -eq 3 ]; then
     if test ! -f "$line/virtualhost.d/name.txt" -o "${virtualhost}" != "$(head -n 1 $line/virtualhost.d/name.txt)"; then
       continue;
     fi
-    if test ! -L "$line/directory"; then
+    if test ! -L "$line/repository"; then
       continue;
     fi
     location="$(head ${line}/name.txt)"
-    directory="$(readlink -f ${line}/directory)"
+    repository="$(readlink -f ${line}/repository)"
 
     # read in the path if present
     path=""
@@ -78,7 +78,7 @@ if [ $# -eq 3 ]; then
 
 <Location ${path}>
   Dav svn
-  SVNPath ${directory}
+  SVNPath ${repository}
   Options +Indexes
 
   IndexOptions FancyIndexing HTMLTable VersionSort XHTML
