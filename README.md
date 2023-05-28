@@ -236,3 +236,41 @@ To remove an open alias called "docs", run this.
 [root@server ~]# device services www open alias remove docs
 ```
 
+# device-httpd-dave
+Provides an Apache webserver WebDAV extension, allowing editable directories to be mapped into the URL space.
+
+This appliance does the following:
+
+- All parameters passed to the device commands are syntax checked and canonicalised, with bash completion.
+- Allows directories to be mapped into the URL space editable using WebDAV.
+- Zero Trust configuration.
+
+## before
+
+- Deploy the device-httpd-dav package.
+
+```
+[root@server ~]# dnf install device-httpd-dav
+```
+
+## add safe dav
+
+To add a safe WebDAV location called "photos", run this.
+
+```
+[root@server ~]# device services www safe dav add name=photos virtualhost=seawitch auth=photos path=/photos directory=photos
+```
+
+The auth option is mandatory.
+
+The directory is specified beneath /var/www/safe/dav, and can be a symbolic link to the real location on disk.
+
+## remove safe dav
+
+To remove a safe WebDAV location called "photos", run this.
+
+```
+[root@server ~]# device services www safe dav remove photos
+```
+
+
