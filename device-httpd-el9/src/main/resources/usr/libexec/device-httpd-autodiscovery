@@ -212,7 +212,7 @@ EOF
 
   install -m 640 "device-${instance}.conf" "/etc/httpd/conf/device-${instance}.conf"
   install -m 0750 -d "/etc/httpd/conf.device.d/instance/${instance}"
-  install -m 0710 -u root -g apache -d "/run/httpd/instance-device-${instance}"
+  install -m 0710 -o root -g apache -d "/run/httpd/instance-device-${instance}"
 
   semanage fcontext -a -t httpd_var_run_t "/var/run/httpd/instance-device-${instance}(/.*)?"
   restorecon -R "/run/httpd/instance-device-${instance}"

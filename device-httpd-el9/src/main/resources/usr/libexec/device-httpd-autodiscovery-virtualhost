@@ -79,7 +79,7 @@ create_instance() {
 
     logger -t httpd-autodiscovery@${instance} "importing httpd server certificate/key..."
 
-    install -m 0710 -u root -g apache -d "/run/httpd/instance-device-${instance}"
+    install -m 0710 -o root -g apache -d "/run/httpd/instance-device-${instance}"
 
     redwax-tool --pem-in="/etc/pki/tls/private/*" \
                 --pem-in="/etc/pki/tls/certs/ca-bundle.trust.crt" \
