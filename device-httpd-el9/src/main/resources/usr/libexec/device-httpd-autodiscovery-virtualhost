@@ -242,6 +242,7 @@ EOF
     install -m 640 "secure-${virtualhost}.conf" "/etc/httpd/conf.device.d/instance/${instance}/secure-${virtualhost}.conf"
   fi
 
+  restorecon -R "/run/httpd/instance-device-${instance}"
 }
 
 
