@@ -211,7 +211,11 @@ IncludeOptional conf.device.d/instance/${instance}/*.conf
 EOF
 
   install -m 640 "device-${instance}.conf" "/etc/httpd/conf/device-${instance}.conf"
-  install -d 0750 "/etc/httpd/conf.device.d/instance/${instance}"
+  install -m 0750 -d "/etc/httpd/conf.device.d/instance/${instance}"
+  install -m 0710 -u root -g apache -d "/run/httpd/instance-device-${instance}"
+
+  semanage fcontext -a -t httpd_var_run_t "/var/run/httpd/instance-device-${instance}(/.*)?"
+  restorecon -R "/run/httpd/instance-device-${instance}"
 
 }
 
@@ -223,6 +227,8 @@ remove_instance() {
 
   rm -f "/etc/httpd/conf/device-${instance}.conf"
   rm -rf "/etc/httpd/conf.device.d/instance/${instance}"
+
+  semanage fcontext -d -t httpd_var_run_t "/var/run/httpd/instance-device-${instance}(/.*)?"
 }
 
 

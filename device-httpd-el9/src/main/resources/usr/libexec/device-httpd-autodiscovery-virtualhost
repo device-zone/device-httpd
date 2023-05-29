@@ -77,9 +77,9 @@ create_instance() {
 
   if test -n "${tlslisten}"; then
 
-    install -m 750 -d "/run/httpd/device-${instance}"
-
     logger -t httpd-autodiscovery@${instance} "importing httpd server certificate/key..."
+
+    install -m 0710 -u root -g apache -d "/run/httpd/instance-device-${instance}"
 
     redwax-tool --pem-in="/etc/pki/tls/private/*" \
                 --pem-in="/etc/pki/tls/certs/ca-bundle.trust.crt" \
@@ -88,9 +88,9 @@ create_instance() {
                 --filter-hostname="${servername}" \
                 --filter-current \
                 --cert-out --chain-out --no-key-out \
-                --pem-out="/run/httpd/device-${instance}/${virtualhost}.crt" \
+                --pem-out="/run/httpd/instance-device-${instance}/${virtualhost}.crt" \
                 --no-cert-out --no-chain-out --key-out \
-                --pem-out="/run/httpd/device-${instance}/${virtualhost}.key" || echo "Could not import cert/key for tls" > "${line}/error"
+                --pem-out="/run/httpd/instance-device-${instance}/${virtualhost}.key" || echo "Could not import cert/key for tls" > "${line}/error"
 
     if test ! -f "${line}/error"; then
       logger -t httpd-autodiscovery@${instance} "imported httpd server certificate/key for ${servername}."
@@ -165,8 +165,8 @@ EOF
   SSLCipherSuite PROFILE=SYSTEM
   SSLProxyCipherSuite PROFILE=SYSTEM
 
-  SSLCertificateFile /run/httpd/device-${instance}/${virtualhost}.crt
-  SSLCertificateKeyFile /run/httpd/device-${instance}/${virtualhost}.key
+  SSLCertificateFile /run/httpd/instance-device-${instance}/${virtualhost}.crt
+  SSLCertificateKeyFile /run/httpd/instance-device-${instance}/${virtualhost}.key
 
 EOF
 
@@ -229,8 +229,8 @@ EOF
 
   rm -rf "/etc/httpd/conf.device.d/instance/${instance}/virtual-${virtualhost}.d/"
   rm -rf "/etc/httpd/conf.device.d/instance/${instance}/secure-${virtualhost}.d/"
-  install -d 0750 "/etc/httpd/conf.device.d/instance/${instance}/virtual-${virtualhost}.d/"
-  install -d 0750 "/etc/httpd/conf.device.d/instance/${instance}/secure-${virtualhost}.d/"
+  install -m 0750 -d "/etc/httpd/conf.device.d/instance/${instance}/virtual-${virtualhost}.d/"
+  install -m 0750 -d "/etc/httpd/conf.device.d/instance/${instance}/secure-${virtualhost}.d/"
 
   run_scripts "${instance}" "${virtualhost}" "${line}"
 
