@@ -1,5 +1,8 @@
 if [ $1 = 1 ]; then
 
+  # Enable cluster mode
+  /usr/sbin/setsebool -P daemons_enable_cluster_mode 1
+
   # Register the service
   /usr/bin/systemctl enable httpd-autodiscovery.service
   /usr/bin/systemctl enable httpd-postdiscovery.service
