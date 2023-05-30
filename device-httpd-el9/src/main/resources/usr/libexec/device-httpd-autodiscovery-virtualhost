@@ -61,6 +61,12 @@ create_instance() {
     tlscacerts=$(readlink -f "$line/tls-ca-certs.crt")
   fi
 
+  if test -f "$line/timeout.txt"; then
+    timeout=$(head -n 1 $line/timeout.txt)
+  else
+    timeout=60
+  fi
+
   install -m 2770 -g apache -d "/var/www/instance/${instance}"
   install -m 2770 -g apache -d "/var/www/instance/${instance}/secure"
   install -m 2770 -g apache -d "/var/www/instance/${instance}/secure/${virtualhost}"
@@ -137,6 +143,9 @@ EOF
 <IfModule !log_config_module>
   LoadModule log_config_module modules/mod_log_config.so
 </IfModule>
+<IfModule !proxy_module>
+  LoadModule proxy_module modules/mod_proxy.so
+</IfModule>
 <IfModule !ssl_module>
   LoadModule ssl_module modules/mod_ssl.so
 </IfModule>
@@ -149,6 +158,9 @@ EOF
   LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\" \"%{SSL_CLIENT_S_DN}x\" \"%{SSL_CLIENT_I_DN}x\"" ssl-combined
   ErrorLog /var/log/httpd/device-${instance}-secure-${virtualhost}-error_log
   CustomLog /var/log/httpd/device-${instance}-secure-${virtualhost}-access_log ssl-combined
+
+  Timeout ${timeout}
+  ProxyTimeout ${timeout}
 
 EOF
 
@@ -197,11 +209,25 @@ EOF
 
   if test -n "${listen}"; then
     cat >> "virtual-${virtualhost}.conf" <<- EOF
+<IfModule !log_config_module>
+  LoadModule log_config_module modules/mod_log_config.so
+</IfModule>
+<IfModule !proxy_module>
+  LoadModule proxy_module modules/mod_proxy.so
+</IfModule>
+
 #
 # Open virtual host
 <VirtualHost ${listen}>
 
   DocumentRoot "/var/www/instance/${instance}/virtual/${virtualhost}/web-docs"
+
+  LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
+  ErrorLog /var/log/httpd/device-${instance}-virtual-${virtualhost}-error_log
+  CustomLog /var/log/httpd/device-${instance}-virtual-${virtualhost}-access_log combined
+
+  Timeout ${timeout}
+  ProxyTimeout ${timeout}
 
 EOF
 
