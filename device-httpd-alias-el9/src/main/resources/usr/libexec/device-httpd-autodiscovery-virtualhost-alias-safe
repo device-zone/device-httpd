@@ -23,7 +23,7 @@ if [ $# -eq 3 ]; then
     if test ! -L "$line/directory"; then
       continue;
     fi
-    location="$(head ${line}/name.txt)"
+    location="$(head -n 1 ${line}/name.txt)"
     directory="$(readlink -f ${line}/directory || continue)"
 
     # read server-name if present
@@ -36,7 +36,7 @@ if [ $# -eq 3 ]; then
     # read in the path if present
     path=""
     if test -f "${line}/path.txt"; then
-      path="$(head ${line}/path.txt)"
+      path="$(head -n 1 ${line}/path.txt)"
     fi
     # empty path becomes a /
     if test -z "${path}";then
