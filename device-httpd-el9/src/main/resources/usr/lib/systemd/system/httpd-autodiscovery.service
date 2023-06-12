@@ -3,6 +3,7 @@
 [Unit]
 Description=Apache httpd Server Configuration Autodiscovery
 ReloadPropagatedFrom=httpd.service
+After=systemd-tmpfiles-setup.service network.target remote-fs.target nss-lookup.target
 
 [Service]
 Type=oneshot

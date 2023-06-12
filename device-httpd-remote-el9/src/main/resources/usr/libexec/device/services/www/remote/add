@@ -1,0 +1,24 @@
+#!/bin/sh
+
+set -e
+umask 0002
+
+tmpdir="$(mktemp -d)"
+trap 'rm -rf -- "${tmpdir}"' EXIT
+
+OPTIONS="--add name --hostname name --required --uri-schemes https --uri-absolute url --symlink-base /etc/pki/tls/certs --symlink-suffix .crt --symlink tls-ca-certs"
+
+# --symlink-context-type httpd_sys_rw_content_t 
+
+if [ "$1" == "--" ]; then
+
+  /usr/libexec/device-set ${OPTIONS} "$@"
+
+  /usr/bin/sudo /usr/bin/systemctl try-reload-or-restart httpd-autodiscovery.service
+
+elif [ "$1" == "-c" ]; then
+
+  /usr/libexec/device-set ${OPTIONS} "$@"
+
+fi
+
