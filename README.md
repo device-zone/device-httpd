@@ -181,7 +181,7 @@ This appliance does the following:
 - Splits content definitions between "open" content, where authorisation is optional, to "safe" content, where authorisation is mandatory, protecting against misconfiguration.
 - Zero Trust configuration.
 
-Open content can be configured allow access without authentication.
+Open content can be configured to allow access without authentication.
 
 Safe content forces the specification of an authentication scheme. Safe content attempts to protect against potential misconfiguration where sensitive content is accidentally stripped of authentication. Care must still be taken to ensure the authentication scheme is meaningful.
 
@@ -319,4 +319,97 @@ To remove a safe subversion repository called "invoices", run this.
 ```
 
 The repository will be removed from the URL space, but is not removed from the disk.
+
+# device-httpd-remote
+Allows a set of remote webservers to be declared, potentially as targets of a proxy defined by
+device-httpd-proxy.
+
+This appliance does the following:
+
+- All parameters passed to the device commands are syntax checked and canonicalised, with bash completion.
+- Allows the specification of remote webservers, along with CA certificates they are expected to
+  be trusted by.
+- Zero Trust configuration.
+
+## before
+
+- Deploy the device-httpd-remote package.
+
+```
+[root@server ~]# dnf install device-httpd-remote
+```
+
+## add remote
+
+To add a remote webserver called "github", which is expected to validate against the CA bundle provided, run this.
+
+```
+[root@server ~]# device services www remote add name=github url="https://github.com/device-zone" tls-ca-certs=ca-bundle.trust
+```
+
+## remove remote
+
+To remove a remote webserver called "github", run this.
+
+```
+[root@server ~]# device services www remote remove github
+```
+
+# device-httpd-proxy
+Provides an Apache webserver proxy extension, allowing remote websites to be mapped into the URL space.
+
+This appliance does the following:
+
+- All parameters passed to the device commands are syntax checked and canonicalised, with bash completion.
+- Splits content definitions between "open" content, where authorisation is optional, to "safe" content, where authorisation is mandatory, protecting against misconfiguration.
+- Zero Trust configuration.
+
+Open content can be configured to allow access without authentication.
+
+Safe content forces the specification of an authentication scheme. Safe content attempts to protect against potential misconfiguration where sensitive content is accidentally stripped of authentication. Care must still be taken to ensure the authentication scheme is meaningful.
+
+## before
+
+- Deploy the device-httpd-proxy package.
+
+```
+[root@server ~]# dnf install device-httpd-proxy
+```
+
+## add safe proxy
+
+To add a proxied remote website defined above called "github", containing sensitive data, run this.
+
+```
+[root@server ~]# device services www safe proxy add name=github virtualhost=seawitch auth=devs path=/device-zone remote=github
+```
+
+The auth option is mandatory.
+
+## remove safe proxy
+
+To remove a safe proxy called "github", run this.
+
+```
+[root@server ~]# device services www safe proxy remove github
+```
+
+## add open proxy
+
+To add a proxied remote website defined above called "github", containing public data, run this.
+
+```
+[root@server ~]# device services www open proxy add name=github virtualhost=seawitch auth=devs path=/device-zone remote=github
+```
+
+The auth option is optional.
+
+## remove open proxy
+
+To remove an open proxy called "github", run this.
+
+```
+[root@server ~]# device services www open proxy remove github
+```
+
 
