@@ -163,7 +163,8 @@
             <require>device-httpd</require>
 	    <require>device-httpd-auth</require>
             <require>mod_dav_svn</require>
-            <require>recode</require>
+            <require>/usr/bin/svnadmin</require>
+	    <require>recode</require>
           </requires>
         </configuration>
       </plugin>
