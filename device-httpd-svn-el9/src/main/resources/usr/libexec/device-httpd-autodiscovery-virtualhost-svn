@@ -73,6 +73,9 @@ if [ $# -eq 3 ]; then
 <IfModule !dir_module>
   LoadModule dir_module modules/mod_dir.so
 </IfModule>
+<IfModule !mime_module>
+  LoadModule mime_module modules/mod_mime.so
+</IfModule>
 
 # DAV configured from ${line}/path.txt
 
@@ -84,6 +87,9 @@ if [ $# -eq 3 ]; then
   IndexOptions FancyIndexing HTMLTable VersionSort XHTML
   DirectoryIndex disabled
   FileETag INode MTime Size
+
+  SVNAutoversioning on
+  ModMimeUsePathInfo on
 
 #    HeaderName /storage-assets/HEADER.html
 #    ReadmeName /storage-assets/FOOTER.html
