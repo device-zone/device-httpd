@@ -6,7 +6,7 @@ umask 0002
 tmpdir="$(mktemp -d)"
 trap 'rm -rf -- "${tmpdir}"' EXIT
 
-OPTIONS="--add name --hostname name --polar disabled --uri access-url --required --url-path-absolute path --relation-base /etc/device/services/www/virtualhost --relation-name name --relation-suffix .txt --relation virtualhost --symlink-base /var/www/alias/svn/ --symlink repository --relation-base /etc/device/services/www/auth --relation-name name --relation-suffix .txt --relation auth "
+OPTIONS="--add name --hostname name --polar disabled --uri access-url --required --url-path-absolute path --relation-base /etc/device/services/www/virtualhost --relation-name name --relation-suffix .txt --relation virtualhost --symlink-base /var/www/safe/svn/ --symlink repository --relation-base /etc/device/services/www/auth --relation-name name --relation-suffix .txt --relation auth "
 
 # --symlink-context-type httpd_sys_rw_content_t 
 

@@ -14,12 +14,12 @@ if [ "$1" == "--" ]; then
 
   if expr match "$reponame" ^[.] > /dev/null; then
     echo "${reponame} cannot start with a dot."
-  elif test -e "/var/www/alias/svn/${reponame}"; then
+  elif test -e "/var/www/safe/svn/${reponame}"; then
     echo "${reponame} already exists."
   else
-    /usr/bin/sudo -u apache -g apache /usr/bin/svnadmin create "/var/www/alias/svn/${reponame}"
-    /usr/bin/sudo -u apache -g apache chmod 2770 -R "/var/www/alias/svn/${reponame}"
-    /usr/bin/sudo /usr/sbin/restorecon -R "/var/www/alias/svn/${reponame}"
+    /usr/bin/sudo -u apache -g apache /usr/bin/svnadmin create "/var/www/safe/svn/${reponame}"
+    /usr/bin/sudo -u apache -g apache chmod 2770 -R "/var/www/safe/svn/${reponame}"
+    /usr/bin/sudo /usr/sbin/restorecon -R "/var/www/safe/svn/${reponame}"
   fi
 
 fi
