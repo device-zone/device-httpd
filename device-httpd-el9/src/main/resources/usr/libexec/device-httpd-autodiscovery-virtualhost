@@ -42,9 +42,13 @@ create_instance() {
 
   if test -f "${line}/listen.d/port.txt"; then
     listen="${address}:$(head -n 1 ${line}/listen.d/port.txt)"
+  else
+    listen=""
   fi
   if test -f "${line}/listen.d/tls-port.txt"; then
     tlslisten="${address}:$(head -n 1 ${line}/listen.d/tls-port.txt)"
+  else
+    tlslisten=""
   fi
 
   if test -f "$line/server-name.txt"; then
@@ -55,10 +59,14 @@ create_instance() {
 
   if test -f "${line}/tls-verify.txt"; then
     tlsverify="$(head -n 1 ${line}/tls-verify.txt)"
+  else
+    tlsverify=""
   fi
 
   if test -f "${line}/tls-ca-certs.crt"; then
     tlscacerts=$(readlink -f "$line/tls-ca-certs.crt")
+  else
+    tlscacerts=""
   fi
 
   if test -f "$line/timeout.txt"; then
@@ -112,6 +120,8 @@ create_instance() {
       if test -z "${tlscacerts}"; then
 
         logger -t httpd-autodiscovery@${instance} "tls-verify set but no tls-ca-certs set for ${servername}. Skipping virtualhost."
+
+        echo "tls-verify set but no tls-ca-certs set for ${servername}" > "${line}/error"
 
         # give up and skip virtual host creation
 	return
