@@ -85,56 +85,54 @@ if [ $# -eq 3 ]; then
 
 # DAV configured from ${line}/path.txt
 
-# This style of config is broken in httpd 2.4 - suffix is lost
-#  <Location ${path}>
-#    Alias ${directory}
-#  </Location>
+<Location ${path}>
 
-  Alias ${path} ${directory}
-  <Directory ${directory}>
-    Dav on
-    Options +Indexes
+  Alias ${directory}
+  Dav on
+  Options +Indexes
 
-    IndexOptions FancyIndexing HTMLTable VersionSort XHTML
-    DirectoryIndex disabled
-    FileETag INode MTime Size
+  IndexOptions FancyIndexing HTMLTable VersionSort XHTML
+  DirectoryIndex disabled
+  FileETag INode MTime Size
+
+  AliasPreservePath on
 
 #    HeaderName /storage-assets/HEADER.html
 #    ReadmeName /storage-assets/FOOTER.html
 
-    AuthzSendForbiddenOnFailure on
+  AuthzSendForbiddenOnFailure on
 
-    <If "%{SSL_CLIENT_VERIFY} == 'SUCCESS' || %{SSL_CLIENT_VERIFY} == 'GENEROUS'">
+  <If "%{SSL_CLIENT_VERIFY} == 'SUCCESS' || %{SSL_CLIENT_VERIFY} == 'GENEROUS'">
 
-      SSLUserName SSL_CLIENT_CERT_RFC4523_CEA
+    SSLUserName SSL_CLIENT_CERT_RFC4523_CEA
 
 EOF
 
     if test -n "${authname}"; then
       cat >> "device-${instance}-${virtualhost}-${location}.conf" <<- EOF
-      require device-${authname}
+    require device-${authname}
 
-      ErrorDocument 403 "<html><head><title>403 Forbidden</title></head><body><h1>Forbidden</h1><p>Your gadget '%{SSL_CLIENT_S_DN_CN}' currently does not have permission to access this URL.${access_text}</p></body></html>"
+    ErrorDocument 403 "<html><head><title>403 Forbidden</title></head><body><h1>Forbidden</h1><p>Your gadget '%{SSL_CLIENT_S_DN_CN}' currently does not have permission to access this URL.${access_text}</p></body></html>"
 
 EOF
     else
       cat >> "device-${instance}-${virtualhost}-${location}.conf" <<- EOF
-      # no authname specified, so access is denied
-      require all denied
+    # no authname specified, so access is denied
+    require all denied
 
-      ErrorDocument 403 "<html><head><title>403 Forbidden</title></head><body><h1>Forbidden</h1><p>Access is currently disabled for this URL space.</p></body></html>"
+    ErrorDocument 403 "<html><head><title>403 Forbidden</title></head><body><h1>Forbidden</h1><p>Access is currently disabled for this URL space.</p></body></html>"
 EOF
     fi
 
     cat >> "device-${instance}-${virtualhost}-${location}.conf" <<- EOF
-    </If>
-    <Else>
-      require all denied
+  </If>
+  <Else>
+    require all denied
 
-      ErrorDocument 403 "<html><head><title>403 Forbidden</title></head><body><h1>Forbidden</h1><p>A digital certificate is required to access this URL, but none was provided. Did you click cancel?${access_text}</p></body></html>"
+    ErrorDocument 403 "<html><head><title>403 Forbidden</title></head><body><h1>Forbidden</h1><p>A digital certificate is required to access this URL, but none was provided. Did you click cancel?${access_text}</p></body></html>"
 
-    </Else>
-  </Directory>
+  </Else>
+</Location>
 EOF
 
     install "device-${instance}-${virtualhost}-${location}.conf" "/etc/httpd/conf.device.d/instance/${instance}/secure-${virtualhost}.d/location-$(echo ${path} | tr [:cntrl:][:punct:] _).conf"
