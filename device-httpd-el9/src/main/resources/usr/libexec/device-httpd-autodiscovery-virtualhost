@@ -257,6 +257,12 @@ EOF
 EOF
     fi
 
+    if test -f "$line/tls-redirect.bin"; then
+      cat >> "virtual-${virtualhost}.conf" <<- EOF
+  RedirectMatch ^/$ https://${servername}/
+EOF
+    fi
+
     cat >> "virtual-${virtualhost}.conf" <<- EOF
 </VirtualHost>
 EOF
