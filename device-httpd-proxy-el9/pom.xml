@@ -157,6 +157,10 @@
               </sources>
             </mapping>
           </mappings>
+          <postinstallScriptlet>
+            <scriptFile>target/classes/postinstall</scriptFile>
+            <fileEncoding>utf-8</fileEncoding>
+          </postinstallScriptlet>
           <requires>
             <require>device-httpd</require>
 	    <require>device-httpd-auth</require>
