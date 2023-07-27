@@ -20,11 +20,7 @@ if [ $# -eq 3 ]; then
     if test ! -f "$line/name.txt"; then
       continue;
     fi
-    if test ! -f "$line/url.txt"; then
-      continue;
-    fi
     location="$(head -n 1 ${line}/name.txt)"
-    url="$(head -n 1 ${line}/url.txt)"
 
     # read server-name if present
     if test -f "$line/virtualhost.d/server-name.txt"; then
