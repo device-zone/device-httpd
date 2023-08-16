@@ -39,6 +39,9 @@ if [ $# -eq 3 ]; then
       path="/"
     fi
 
+    # remove for safety
+    rm -f "/etc/httpd/conf.device.d/instance/${instance}/secure-${virtualhost}.d/location-$(echo ${path} | tr [:cntrl:][:punct:] _).conf"
+
     # read auth if present
     # Note: "open" MAY be open, MAY be locked, and MAY be misconfigured
     authname=""
