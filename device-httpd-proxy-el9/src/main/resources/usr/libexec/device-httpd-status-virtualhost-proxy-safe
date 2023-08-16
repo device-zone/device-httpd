@@ -1,0 +1,87 @@
+#!/bin/bash
+
+if [ $# -eq 4 ]; then
+
+  instance="${1}"
+  virtualhost="${2}"
+  url="${3}"
+
+  #
+  # Handle proxy safe locations
+
+  # find /etc/device/services/www/safe/proxy/ -mindepth 1 -maxdepth 1 -type l
+  while read line; do
+
+    if test ! -f "$line/virtualhost.d/listen.d/instance.d/name.txt" -o "${instance}" != "$(head -n 1 $line/virtualhost.d/listen.d/instance.d/name.txt)"; then
+      continue;
+    fi
+    if test ! -f "$line/virtualhost.d/name.txt" -o "${virtualhost}" != "$(head -n 1 $line/virtualhost.d/name.txt)"; then
+      continue;
+    fi
+    if test ! -f "$line/name.txt"; then
+      continue;
+    fi
+    location="$(head -n 1 ${line}/name.txt)"
+
+    # read server-name if present
+    if test -f "$line/virtualhost.d/server-name.txt"; then
+      servername="$(head -n 1 $line/virtualhost.d/server-name.txt)"
+    else
+      servername="$(hostname -f)"
+    fi
+
+    # read in the path if present
+    path=""
+    if test -f "${line}/path.txt"; then
+      path="$(head -n 1 ${line}/path.txt)"
+    fi
+    # empty path becomes a /
+    if test -z "${path}";then
+      path="/"
+    fi
+
+    # read auth if present
+    # Note: "safe" MUST NOT be open, MUST be safe, and MAY be misconfigured
+    authname=""
+    if test -f "$line/auth.d/name.txt"; then
+      authname="$(head -n 1 $line/auth.d/name.txt)"
+    fi
+    if test -z "${authname}"; then
+      continue;
+    fi
+
+    # read url if present
+    remote_url=""
+    if test -f "$line/remote.d/url.txt"; then
+      remote_url="$(head -n 1 $line/remote.d/url.txt)"
+    fi
+    if test -z "${remote_url}"; then
+      continue;
+    fi
+
+    # max/aquire if present
+    params=" upgrade=on mapping=encoded"
+    if test -f "$line/max.txt"; then
+      params+=" max=$(head -n 1 ${line}/max.txt)"
+    fi
+    if test -f "$line/acquire.txt"; then
+      params+=" acquire=$(head -n 1 ${line}/acquire.txt)"
+    fi
+
+    echo
+    echo "    Safe proxy: ${location}"
+    echo "    - ${url}${path}"
+    echo "    - remote: ${remote_url}"
+    echo "    - params:${params}"
+
+    if test -n "${authname}"; then
+      echo "    - auth: ${authname}"
+    else
+      echo "    - open auth"
+    fi
+
+  done < <(find /etc/device/services/www/safe/proxy/ -mindepth 1 -maxdepth 1 -type l)
+
+fi
+
+

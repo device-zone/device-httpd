@@ -1,0 +1,78 @@
+#!/bin/bash
+
+#
+# Per application? Run all scripts
+
+run_scripts() {
+
+  instance="${1}"
+  virtualhost="${2}"
+  url="${3}"
+  line="${4}"
+
+  find "/usr/libexec/device-status/httpd-virtualhost.d" -type f -executable | sort | \
+  while read x; do
+    "$x" "${instance}" "${virtualhost}" "${url}" "${line}" < /dev/null || true;
+  done
+
+}
+
+
+if [ $# -eq 2 ]; then
+
+  instance="${1}"
+
+  #
+  # Handle virtual hosts
+
+  # find /etc/device/services/www/virtualhost/ -mindepth 1 -maxdepth 1 -type l
+  while read line; do
+
+    if test ! -f "$line/listen.d/instance.d/name.txt" -o "${instance}" != "$(head $line/listen.d/instance.d/name.txt)"; then
+      continue;
+    fi
+    if test ! -f "$line/name.txt"; then
+      continue;
+    fi
+
+    instance="$(head -n 1 $line/listen.d/instance.d/name.txt)"
+    virtualhost="$(head -n 1 $line/name.txt)"
+
+    echo
+    echo "  Virtualhost: ${virtualhost}"
+
+    if test -f "$line/server-name.txt"; then
+      servername=$(head -n 1 $line/server-name.txt)
+    else
+      servername=$(hostname -f)
+    fi
+
+#    if test -f "${line}/listen.d/port.txt"; then
+#      echo "  - http://${servername}:$(head -n 1 ${line}/listen.d/port.txt)"
+#    fi
+    if test -f "${line}/listen.d/tls-port.txt"; then
+      tlsport="$(head -n 1 ${line}/listen.d/tls-port.txt)"
+      if test "443" = "${tlsport}"; then
+        url="https://${servername}"
+      else
+        url="https://${servername}:${tlsport}"
+      fi
+
+      redwax-tool --pem-in="/etc/pki/tls/private/*" \
+                  --pem-in="/etc/pki/tls/certs/ca-bundle.trust.crt" \
+                  --pem-in="/etc/pki/tls/certs/*.pem" \
+                  --filter=verify \
+                  --filter-hostname="${servername}" \
+                  --filter-current \
+                  --quiet || echo "  * Valid certificate and/or key could not be found beneath /etc/pki/tls for ${servername}"
+
+      echo "  - ${url}"
+    fi
+
+    run_scripts "${instance}" "${virtualhost}" "${url}" "${line}"
+
+  done < <(find /etc/device/services/www/virtualhost/ -mindepth 1 -maxdepth 1 -type l)
+
+fi
+
+

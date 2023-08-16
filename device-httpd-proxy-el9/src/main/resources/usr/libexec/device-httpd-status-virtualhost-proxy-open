@@ -1,0 +1,94 @@
+#!/bin/bash
+
+if [ $# -eq 4 ]; then
+
+  instance="${1}"
+  virtualhost="${2}"
+  url="${3}"
+
+  #
+  # Handle proxy open locations
+
+  # find /etc/device/services/www/open/proxy/ -mindepth 1 -maxdepth 1 -type l
+  while read line; do
+
+    if test ! -f "$line/virtualhost.d/listen.d/instance.d/name.txt" -o "${instance}" != "$(head -n 1 $line/virtualhost.d/listen.d/instance.d/name.txt)"; then
+      continue;
+    fi
+    if test ! -f "$line/virtualhost.d/name.txt" -o "${virtualhost}" != "$(head -n 1 $line/virtualhost.d/name.txt)"; then
+      continue;
+    fi
+    if test ! -f "$line/name.txt"; then
+      continue;
+    fi
+    location="$(head -n 1 ${line}/name.txt)"
+
+    # read server-name if present
+    if test -f "$line/virtualhost.d/server-name.txt"; then
+      servername="$(head -n 1 $line/virtualhost.d/server-name.txt)"
+    else
+      servername="$(hostname -f)"
+    fi
+
+    # read in the path if present
+    path=""
+    if test -f "${line}/path.txt"; then
+      path="$(head -n 1 ${line}/path.txt)"
+    fi
+    # empty path becomes a /
+    if test -z "${path}";then
+      path="/"
+    fi
+
+    # read auth if present
+    # Note: "open" MAY be open, MAY be locked, and MAY be misconfigured
+    authname=""
+    if test -f "$line/auth.d/name.txt"; then
+      authname="$(head -n 1 $line/auth.d/name.txt)"
+    fi
+
+    # read url if present
+    remote_url=""
+    if test -f "$line/remote.d/url.txt"; then
+      remote_url="$(head -n 1 $line/remote.d/url.txt)"
+    fi
+    if test -z "${remote_url}"; then
+      continue;
+    fi
+
+    # access url if present
+    access_url=""
+    access_text=""
+    if test -f "$line/access-url.txt"; then
+      access_url="$(head -n 1 ${line}/access-url.txt)"
+      if test -n "${access_url}"; then
+        access_text=" To request access, <a href='$(echo ${access_url} | recode ..html)'>click here</a>."
+      fi
+    fi
+
+    # max/aquire if present
+    params=" upgrade=on mapping=encoded"
+    if test -f "$line/max.txt"; then
+      params+=" max=$(head -n 1 ${line}/max.txt)"
+    fi
+    if test -f "$line/acquire.txt"; then
+      params+=" acquire=$(head -n 1 ${line}/acquire.txt)"
+    fi
+
+    echo
+    echo "    Open proxy: ${location}"
+    echo "    - ${url}${path}"
+    echo "    - remote: ${remote_url}"
+    echo "    - params:${params}"
+
+    if test -n "${authname}"; then
+      echo "    - auth: ${authname}"
+    else
+      echo "    - open auth"
+    fi
+
+  done < <(find /etc/device/services/www/open/proxy/ -mindepth 1 -maxdepth 1 -type l)
+
+fi
+
+

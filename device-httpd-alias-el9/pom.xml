@@ -100,6 +100,23 @@
               </sources>
             </mapping>
             <mapping>
+              <directory>/usr/libexec/device-status/httpd-virtualhost.d</directory>
+              <directoryIncluded>false</directoryIncluded>
+              <filemode>755</filemode>
+              <username>root</username>
+              <groupname>root</groupname>
+              <sources>
+                <source>
+                  <location>target/classes/usr/libexec/device-httpd-status-virtualhost-alias-open</location>
+                  <destination>20-alias-open</destination>
+                </source>
+                <source>
+                  <location>target/classes/usr/libexec/device-httpd-status-virtualhost-alias-safe</location>
+                  <destination>10-alias-safe</destination>
+                </source>
+              </sources>
+            </mapping>
+            <mapping>
               <directory>/etc/device/services/www/open/alias</directory>
               <directoryIncluded>true</directoryIncluded>
               <filemode>2775</filemode>

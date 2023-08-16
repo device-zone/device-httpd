@@ -35,6 +35,14 @@
         </includes>
       </resource>
       <resource>
+        <targetPath>etc</targetPath>
+        <directory>src/main/resources/etc</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>**/*</include>
+        </includes>
+      </resource>
+      <resource>
         <targetPath>usr</targetPath>
         <directory>src/main/resources/usr</directory>
         <filtering>true</filtering>
@@ -111,6 +119,19 @@
               <groupname>root</groupname>
             </mapping>
             <mapping>
+              <directory>/etc/profile.d</directory>
+              <directoryIncluded>false</directoryIncluded>
+              <filemode>755</filemode>
+              <username>root</username>
+              <groupname>root</groupname>
+              <sources>
+                <source>
+                  <location>target/classes/etc/profile.d/device-status-httpd.sh</location>
+                  <destination>device-status-httpd.sh</destination>
+                </source>
+              </sources>
+            </mapping>
+            <mapping>
               <directory>/usr/libexec/device-autodiscovery</directory>
               <directoryIncluded>false</directoryIncluded>
               <filemode>755</filemode>
@@ -166,21 +187,6 @@
               <username>root</username>
               <groupname>root</groupname>
             </mapping>
-	    <!--
-	    <mapping>
-	      <directory>/usr/libexec/device-autodiscovery/httpd-virtualhost.d</directory>
-              <directoryIncluded>false</directoryIncluded>
-              <filemode>755</filemode>
-              <username>root</username>
-              <groupname>root</groupname>
-              <sources>
-                <source>
-                  <location>target/classes/usr/libexec/device-httpd-autodiscovery-virtualhost-tls</location>
-                  <destination>10-tls</destination>
-                </source>
-              </sources>
-	    </mapping>
-            -->
             <mapping>
               <directory>/usr/libexec/device-postdiscovery</directory>
               <directoryIncluded>false</directoryIncluded>
@@ -213,6 +219,54 @@
                   <destination>20-listen</destination>
                 </source>
               </sources>
+            </mapping>
+            <mapping>
+              <directory>/usr/libexec/device-status</directory>
+              <directoryIncluded>false</directoryIncluded>
+              <filemode>755</filemode>
+              <username>root</username>
+              <groupname>root</groupname>
+              <sources>
+                <source>
+                  <location>target/classes/usr/libexec/device-httpd-status</location>
+                  <destination>httpd</destination>
+                </source>
+              </sources>
+            </mapping>
+            <mapping>
+              <directory>/usr/libexec/device-status/httpd.d</directory>
+              <directoryIncluded>true</directoryIncluded>
+              <filemode>755</filemode>
+              <username>root</username>
+              <groupname>root</groupname>
+            </mapping>
+            <mapping>
+              <directory>/usr/libexec/device-status/httpd.d</directory>
+              <directoryIncluded>false</directoryIncluded>
+              <filemode>755</filemode>
+              <username>root</username>
+              <groupname>root</groupname>
+              <sources>
+                <source>
+                  <location>target/classes/usr/libexec/device-httpd-status-listen</location>
+                  <destination>20-listen</destination>
+                </source>
+                <source>
+                  <location>target/classes/usr/libexec/device-httpd-status-listen</location>
+                  <destination>20-listen</destination>
+                </source>
+                <source>
+                  <location>target/classes/usr/libexec/device-httpd-status-virtualhost</location>
+                  <destination>30-virtualhost</destination>
+                </source>
+              </sources>
+            </mapping>
+            <mapping>
+              <directory>/usr/libexec/device-status/httpd-virtualhost.d</directory>
+              <directoryIncluded>true</directoryIncluded>
+              <filemode>755</filemode>
+              <username>root</username>
+              <groupname>root</groupname>
             </mapping>
             <mapping>
               <directory>/usr/lib/systemd/system</directory>

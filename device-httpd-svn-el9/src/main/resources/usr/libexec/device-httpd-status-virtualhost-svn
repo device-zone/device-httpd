@@ -1,0 +1,67 @@
+#!/bin/bash
+
+if [ $# -eq 4 ]; then
+
+  instance="${1}"
+  virtualhost="${2}"
+  url="${3}"
+
+  #
+  # Handle svn locations
+  
+  # find /etc/device/services/www/safe/svn/ -mindepth 1 -maxdepth 1 -type l
+  while read line; do
+
+    if test ! -f "$line/name.txt"; then
+      continue;
+    fi
+    aliassvn="$(head -n 1 ${line}/name.txt)"
+ 
+    if test -f "$line/disabled.bin"; then
+      continue;
+    fi
+ 
+    if test ! -f "$line/virtualhost.d/listen.d/instance.d/name.txt" -o "${instance}" != "$(head -n 1 $line/virtualhost.d/listen.d/instance.d/name.txt)"; then
+      continue;
+    fi
+    if test ! -f "$line/virtualhost.d/name.txt" -o "${virtualhost}" != "$(head -n 1 $line/virtualhost.d/name.txt)"; then
+      continue;
+    fi
+    if test ! -L "$line/repository"; then
+      continue;
+    fi
+    location="$(head ${line}/name.txt)"
+    repository="$(readlink -f ${line}/repository)"
+
+    # read in the path if present
+    path=""
+    if test -f "${line}/path.txt"; then
+      path="$(head ${line}/path.txt)"
+    fi
+    # empty path becomes a /
+    if test -z "${path}";then
+      path="/"
+    fi
+
+    # read auth if present
+    authname=""
+    if test -f "$line/auth.d/name.txt"; then
+      authname="$(head -n 1 $line/auth.d/name.txt)"
+    fi
+
+    echo
+    echo "    Subversion repo: ${aliassvn}"
+    echo "    - ${url}${path}"
+    echo "    - repository: ${repository}"
+
+    if test -n "${authname}"; then
+      echo "    - auth: ${authname}"
+    else
+      echo "    - open auth"
+    fi
+
+  done < <(find /etc/device/services/www/safe/svn/ -mindepth 1 -maxdepth 1 -type l)
+
+fi
+
+

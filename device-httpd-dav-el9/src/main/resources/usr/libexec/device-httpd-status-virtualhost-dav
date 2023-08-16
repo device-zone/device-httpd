@@ -1,0 +1,68 @@
+#!/bin/bash
+
+if [ $# -eq 4 ]; then
+
+  instance="${1}"
+  virtualhost="${2}"
+  url="${3}"
+
+  #
+  # Handle dav locations
+  
+  # find /etc/device/services/www/safe/dav/ -mindepth 1 -maxdepth 1 -type l
+  while read line; do
+
+    if test ! -f "$line/name.txt"; then
+      continue;
+    fi
+    aliasdav="$(head -n 1 ${line}/name.txt)"
+ 
+    if test -f "$line/disabled.bin"; then
+      logger -t $0 "DAV safe alias disabled, ignoring: ${aliasdav}"
+      continue;
+    fi
+ 
+    if test ! -f "$line/virtualhost.d/listen.d/instance.d/name.txt" -o "${instance}" != "$(head -n 1 $line/virtualhost.d/listen.d/instance.d/name.txt)"; then
+      continue;
+    fi
+    if test ! -f "$line/virtualhost.d/name.txt" -o "${virtualhost}" != "$(head -n 1 $line/virtualhost.d/name.txt)"; then
+      continue;
+    fi
+    if test ! -L "$line/directory"; then
+      continue;
+    fi
+    location="$(head ${line}/name.txt)"
+    directory="$(readlink -f ${line}/directory)"
+
+    # read in the path if present
+    path=""
+    if test -f "${line}/path.txt"; then
+      path="$(head ${line}/path.txt)"
+    fi
+    # empty path becomes a /
+    if test -z "${path}";then
+      path="/"
+    fi
+
+    # read auth if present
+    authname=""
+    if test -f "$line/auth.d/name.txt"; then
+      authname="$(head -n 1 $line/auth.d/name.txt)"
+    fi
+
+    echo
+    echo "    WebDAV repo: ${aliasdav}"
+    echo "    - ${url}${path}"
+    echo "    - directory: ${directory}"
+
+    if test -n "${authname}"; then
+      echo "    - auth: ${authname}"
+    else
+      echo "    - open auth"
+    fi
+
+  done < <(find /etc/device/services/www/safe/dav/ -mindepth 1 -maxdepth 1 -type l)
+
+fi
+
+

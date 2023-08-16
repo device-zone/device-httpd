@@ -109,6 +109,19 @@
               </sources>
             </mapping>
             <mapping>
+              <directory>/usr/libexec/device-status/httpd-virtualhost.d</directory>
+              <directoryIncluded>false</directoryIncluded>
+              <filemode>755</filemode>
+              <username>root</username>
+              <groupname>root</groupname>
+              <sources>
+                <source>
+                  <location>target/classes/usr/libexec/device-httpd-status-virtualhost-dav</location>
+                  <destination>10-dav</destination>
+                </source>
+              </sources>
+            </mapping>
+            <mapping>
               <directory>/etc/device/services/www/safe/dav</directory>
               <directoryIncluded>true</directoryIncluded>
               <filemode>2775</filemode>
