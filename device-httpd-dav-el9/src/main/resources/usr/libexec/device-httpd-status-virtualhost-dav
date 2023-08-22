@@ -51,14 +51,14 @@ if [ $# -eq 4 ]; then
     fi
 
     echo
-    echo "    WebDAV repo: ${aliasdav}"
-    echo "    - ${url}${path}"
-    echo "    - directory: ${directory}"
+    echo "    WebDAV repo + ${aliasdav}:"
+    echo "      url: ${url}${path}"
+    echo "      directory: ${directory}"
 
     if test -n "${authname}"; then
-      echo "    - auth: ${authname}"
+      echo "      auth: ${authname}"
     else
-      echo "    - open auth"
+      echo "      no-auth: open"
     fi
 
   done < <(find /etc/device/services/www/safe/dav/ -mindepth 1 -maxdepth 1 -type l)

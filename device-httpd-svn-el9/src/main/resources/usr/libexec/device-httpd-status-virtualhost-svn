@@ -50,14 +50,14 @@ if [ $# -eq 4 ]; then
     fi
 
     echo
-    echo "    Subversion repo: ${aliassvn}"
-    echo "    - ${url}${path}"
-    echo "    - repository: ${repository}"
+    echo "    Subversion repo + ${aliassvn}:"
+    echo "      url: ${url}${path}"
+    echo "      repository: ${repository}"
 
     if test -n "${authname}"; then
-      echo "    - auth: ${authname}"
+      echo "      auth: ${authname}"
     else
-      echo "    - open auth"
+      echo "      no-auth: open"
     fi
 
   done < <(find /etc/device/services/www/safe/svn/ -mindepth 1 -maxdepth 1 -type l)

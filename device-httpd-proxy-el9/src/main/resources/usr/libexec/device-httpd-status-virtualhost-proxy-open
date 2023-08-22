@@ -76,15 +76,15 @@ if [ $# -eq 4 ]; then
     fi
 
     echo
-    echo "    Open proxy: ${location}"
-    echo "    - ${url}${path}"
-    echo "    - remote: ${remote_url}"
-    echo "    - params:${params}"
+    echo "    Open proxy + ${location}:"
+    echo "      url: ${url}${path}"
+    echo "      remote: ${remote_url}"
+    echo "      params:${params}"
 
     if test -n "${authname}"; then
-      echo "    - auth: ${authname}"
+      echo "      auth: ${authname}"
     else
-      echo "    - open auth"
+      echo "      no-auth: open"
     fi
 
   done < <(find /etc/device/services/www/open/proxy/ -mindepth 1 -maxdepth 1 -type l)
