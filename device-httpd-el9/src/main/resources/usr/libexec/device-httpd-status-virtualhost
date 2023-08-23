@@ -62,7 +62,8 @@ if [ $# -eq 2 ]; then
       fi
 
       echo "    url: ${url}"
-      echo "    certificates:"
+      echo
+      echo "    Certificates:"
 
       redwax-tool --pem-in="/etc/pki/tls/private/*" \
                   --pem-in="/etc/pki/tls/certs/ca-bundle.trust.crt" \
