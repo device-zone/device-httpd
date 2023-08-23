@@ -90,7 +90,7 @@ def colors:
  "reset": "\u001b[0m",
 };
 
-. | .Certificates[] | 
+. | ( .Certificates[] | 
 "    - subject: " + .Data.Subject ,
 "      issuer: " + .Data.Issuer,
 "      origin: " + .Origin,
@@ -98,8 +98,13 @@ if ( .Data.Validity.Error != null ) then "      error: " + colors.red + colors.i
 if ( .Data.Validity.Warning != null ) then "      warning: " + colors.yellow + colors.invert + .Data.Validity.Warning + colors.reset else empty end,
 if ( .Data.Validity.Status != null ) then "      status: " + colors.green + .Data.Validity.Status + colors.reset else empty end
 
+) // "    - error: " + colors.red + colors.invert + "No certificate found under /etc/pki/tls to match \"'${servername}'\"" + colors.reset
 '
-      
+
+      if test ${PIPESTATUS[0]} -ne 0; then
+        echo "    - error: No certificate found under /etc/pki/tls to match '${servername}'"
+      fi
+
     fi
 
     run_scripts "${instance}" "${virtualhost}" "${url}" "${line}"
