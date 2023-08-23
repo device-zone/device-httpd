@@ -4,7 +4,7 @@
   <parent>
     <artifactId>device-httpd</artifactId>
     <groupId>zone.device.platform</groupId>
-    <version>0.9.19</version>
+    <version>0.9.20-SNAPSHOT</version>
   </parent>
 
   <properties>
@@ -18,7 +18,7 @@
 
   <artifactId>device-httpd-remote</artifactId>
   <groupId>zone.device.platform.el9</groupId>
-  <version>0.9.19</version>
+  <version>0.9.20-SNAPSHOT</version>
   <packaging>rpm</packaging>
   <name>device httpd remote applicance for el9</name>
   <description>Packaging for the httpd remote server appliance for ${release.distribution}</description>
