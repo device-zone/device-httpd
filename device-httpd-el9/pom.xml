@@ -453,6 +453,7 @@
             <require>mod_ssl</require>
             <require>device</require>
             <require>redwax-tool</require>
+            <require>jq</require>
             <require>/usr/sbin/semanage</require>
           </requires>
         </configuration>
