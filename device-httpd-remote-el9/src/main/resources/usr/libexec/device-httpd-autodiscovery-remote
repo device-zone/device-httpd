@@ -13,6 +13,9 @@ if [ $# -eq 2 ]; then
 <IfModule !proxy_module>
   LoadModule proxy_module modules/mod_proxy.so
 </IfModule>
+<IfModule !ssl_module>
+  LoadModule ssl_module modules/mod_ssl.so
+</IfModule>
 
 EOF
 
