@@ -58,6 +58,8 @@ while read line; do
   else
     echo -n "- httpd@device-${instance}: "
     SYSTEMD_COLORS=1 systemctl is-active "httpd@device-${instance}" || true
+    echo -n "  configtest: "
+    /usr/sbin/httpd -t -f /etc/httpd/conf/device-${instance}.conf || true
   fi
 
   found="found"
