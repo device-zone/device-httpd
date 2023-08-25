@@ -98,7 +98,7 @@ create_instance() {
     redwax-tool --pem-in="/etc/pki/tls/private/*" \
                 --pem-in="/etc/pki/tls/certs/ca-bundle.trust.crt" \
                 --pem-in="/etc/pki/tls/certs/*.pem" \
-                --filter=verify \
+                --filter=search \
                 --filter-hostname="${servername}" \
                 --filter-current \
                 --cert-out --chain-out --no-key-out \
@@ -325,6 +325,8 @@ if [ $# -eq 2 ]; then
 
     instance="$(head -n 1 $line/listen.d/instance.d/name.txt)"
     virtualhost="$(head -n 1 $line/name.txt)"
+
+    rm -f "${line}/error"
 
     # remove old instances
     if test -f "$line/removed"; then
