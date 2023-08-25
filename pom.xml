@@ -8,7 +8,7 @@
 
   <artifactId>device-httpd</artifactId>
   <groupId>zone.device.platform</groupId>
-  <version>0.9.20-SNAPSHOT</version>
+  <version>0.9.20</version>
   <packaging>pom</packaging>
   <name>device httpd package</name>
   <description>Packaging for the httpd appliances</description>
@@ -20,9 +20,9 @@
   </organization>
 
   <scm>
-    <connection>scm:svn:https://github.com/device-zone/device-httpd/trunk</connection>
-    <developerConnection>scm:svn:https://github.com/device-zone/device-httpd/trunk</developerConnection>
-    <url>https://github.com/device-zone/device-httpd/trunk</url>
+    <connection>scm:svn:https://github.com/device-zone/device-httpd/tags/device-httpd-0.9.20</connection>
+    <developerConnection>scm:svn:https://github.com/device-zone/device-httpd/tags/device-httpd-0.9.20</developerConnection>
+    <url>https://github.com/device-zone/device-httpd/tags/device-httpd-0.9.20</url>
   </scm>
 
   <modules>
