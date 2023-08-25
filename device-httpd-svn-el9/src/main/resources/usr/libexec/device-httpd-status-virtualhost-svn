@@ -31,7 +31,7 @@ if [ $# -eq 4 ]; then
       continue;
     fi
     location="$(head ${line}/name.txt)"
-    repository="$(readlink -f ${line}/repository)"
+    repository="$(readlink -m ${line}/repository)"
 
     # read in the path if present
     path=""

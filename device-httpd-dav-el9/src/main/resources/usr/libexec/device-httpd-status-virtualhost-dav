@@ -32,7 +32,7 @@ if [ $# -eq 4 ]; then
       continue;
     fi
     location="$(head ${line}/name.txt)"
-    directory="$(readlink -f ${line}/directory)"
+    directory="$(readlink -m ${line}/directory)"
 
     # read in the path if present
     path=""

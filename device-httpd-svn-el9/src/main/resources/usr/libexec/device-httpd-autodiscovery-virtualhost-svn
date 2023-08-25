@@ -31,7 +31,12 @@ if [ $# -eq 3 ]; then
       continue;
     fi
     location="$(head ${line}/name.txt)"
-    repository="$(readlink -f ${line}/repository)"
+    repository="$(readlink -m ${line}/repository)"
+
+    if test -z "${repository}"; then
+      logger -t $0 "Warning: SVN safe alias points at a broken symlink, ignoring: ${line}/repository"
+      continue;
+    fi
 
     # read in the path if present
     path=""

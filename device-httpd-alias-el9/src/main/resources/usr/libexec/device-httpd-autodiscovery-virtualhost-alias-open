@@ -24,7 +24,12 @@ if [ $# -eq 3 ]; then
       continue;
     fi
     location="$(head -n 1 ${line}/name.txt)"
-    directory="$(readlink -f ${line}/directory || continue)"
+    directory="$(readlink -m ${line}/directory)"
+
+    if test -z "${directory}"; then
+      logger -t $0 "Warning: Open alias points at a broken symlink, ignoring: ${line}/directory"
+      continue;
+    fi
 
     # read server-name if present
     if test -f "$line/virtualhost.d/server-name.txt"; then

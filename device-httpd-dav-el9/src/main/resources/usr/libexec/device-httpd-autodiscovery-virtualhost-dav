@@ -31,7 +31,12 @@ if [ $# -eq 3 ]; then
       continue;
     fi
     location="$(head ${line}/name.txt)"
-    directory="$(readlink -f ${line}/directory)"
+    directory="$(readlink -m ${line}/directory)"
+
+    if test -z "${directory}"; then
+      logger -t $0 "Warning: DAV safe alias points at a broken symlink, ignoring: ${line}/directory"
+      continue;
+    fi
 
     # read in the path if present
     path=""
