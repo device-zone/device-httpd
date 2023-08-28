@@ -1,0 +1,21 @@
+#!/bin/sh
+  
+set -e
+umask 0002
+
+tmpdir="$(mktemp -d)"
+trap 'rm -rf -- "${tmpdir}"' EXIT
+
+OPTIONS="--show name --hostname name --integer-minimum 1 --integer-maximum 20000 --integer server-limit --integer-minimum 1 --integer-maximum 1000000 --integer max-request-workers --integer-minimum 1 --integer-maximum 100000 --integer thread-limit --integer-minimum 1 --integer-maximum 100000 --integer threads-per-child --required --select-base ${tmpdir}/mpms.txt --select module"
+
+if [ "$1" == "--" ]; then
+
+  /usr/libexec/device-set ${OPTIONS} "$@"
+
+elif [ "$1" == "-c" ]; then
+
+  /usr/libexec/device-set ${OPTIONS} "$@"
+
+fi
+
+

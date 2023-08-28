@@ -1,0 +1,21 @@
+#!/bin/sh
+  
+set -e
+umask 0002
+
+tmpdir="$(mktemp -d)"
+trap 'rm -rf -- "${tmpdir}"' EXIT
+
+OPTIONS="--show name --hostname name --port port --port tls-port --fqdn address --required --relation-base /etc/device/services/www/instance --relation-name name --relation-suffix .txt --relation instance"
+
+if [ "$1" == "--" ]; then
+
+  /usr/libexec/device-set ${OPTIONS} "$@"
+
+elif [ "$1" == "-c" ]; then
+
+  /usr/libexec/device-set ${OPTIONS} "$@" | cat
+
+fi
+
+

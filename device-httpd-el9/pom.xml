@@ -315,6 +315,9 @@
                 <source>
                   <location>target/classes/usr/libexec/device/services/www/instance/set</location>
                 </source>
+                <source>
+                  <location>target/classes/usr/libexec/device/services/www/instance/show</location>
+                </source>
               </sources>
             </mapping>
             <mapping>
@@ -346,6 +349,9 @@
                 </source>
                 <source>
                   <location>target/classes/usr/libexec/device/services/www/virtualhost/set</location>
+                </source>
+                <source>
+                  <location>target/classes/usr/libexec/device/services/www/virtualhost/show</location>
                 </source>
               </sources>
             </mapping>
@@ -391,6 +397,9 @@
                 <source>
                   <location>target/classes/usr/libexec/device/services/www/mpm/set</location>
                 </source>
+                <source>
+                  <location>target/classes/usr/libexec/device/services/www/mpm/show</location>
+                </source>
               </sources>
             </mapping>
             <mapping>
@@ -422,6 +431,9 @@
                 </source>
                 <source>
                   <location>target/classes/usr/libexec/device/services/www/listen/set</location>
+                </source>
+                <source>
+                  <location>target/classes/usr/libexec/device/services/www/listen/show</location>
                 </source>
               </sources>
             </mapping>
