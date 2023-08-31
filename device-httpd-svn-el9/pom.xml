@@ -152,6 +152,9 @@
                   <location>target/classes/usr/libexec/device/services/www/safe/svn/set</location>
                 </source>
                 <source>
+                  <location>target/classes/usr/libexec/device/services/www/safe/svn/show</location>
+                </source>
+                <source>
                   <location>target/classes/usr/libexec/device/services/www/safe/svn/create-repo</location>
                 </source>
 	      </sources>

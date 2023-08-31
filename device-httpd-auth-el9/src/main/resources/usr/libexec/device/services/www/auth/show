@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -e
+umask 0002
+
+OPTIONS="--show name --hostname name --show-flags disabled --show-table name,ldap-suffix,ldap-group --flag X --polar disabled --relation-base /etc/device/services/ldap/suffix --relation-name name --relation-suffix .txt --relation ldap-suffix --distinguished-name ldap-group --required"
+
+if [ "$1" == "--" ]; then
+
+  /usr/libexec/device-set ${OPTIONS} "$@"
+
+elif [ "$1" == "-c" ]; then
+
+  /usr/libexec/device-set ${OPTIONS} "$@"
+
+fi
+

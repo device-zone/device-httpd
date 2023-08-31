@@ -151,6 +151,9 @@
                 <source>
                   <location>target/classes/usr/libexec/device/services/www/safe/dav/set</location>
                 </source>
+                <source>
+                  <location>target/classes/usr/libexec/device/services/www/safe/dav/show</location>
+                </source>
               </sources>
             </mapping>
             <mapping>

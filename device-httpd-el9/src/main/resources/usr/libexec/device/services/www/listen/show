@@ -6,7 +6,7 @@ umask 0002
 tmpdir="$(mktemp -d)"
 trap 'rm -rf -- "${tmpdir}"' EXIT
 
-OPTIONS="--show name --hostname name --port port --port tls-port --fqdn address --required --relation-base /etc/device/services/www/instance --relation-name name --relation-suffix .txt --relation instance"
+OPTIONS="--show name --hostname name --show-table name,address,port,tls-port,instance --port port --port tls-port --fqdn address --required --relation-base /etc/device/services/www/instance --relation-name name --relation-suffix .txt --relation instance"
 
 if [ "$1" == "--" ]; then
 

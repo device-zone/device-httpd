@@ -146,6 +146,9 @@
                 <source>
                   <location>target/classes/usr/libexec/device/services/www/open/proxy/set</location>
                 </source>
+                <source>
+                  <location>target/classes/usr/libexec/device/services/www/open/proxy/show</location>
+                </source>
               </sources>
             </mapping>
             <mapping>
@@ -170,6 +173,9 @@
                 </source>
                 <source>
                   <location>target/classes/usr/libexec/device/services/www/safe/proxy/set</location>
+                </source>
+                <source>
+                  <location>target/classes/usr/libexec/device/services/www/safe/proxy/show</location>
                 </source>
               </sources>
             </mapping>

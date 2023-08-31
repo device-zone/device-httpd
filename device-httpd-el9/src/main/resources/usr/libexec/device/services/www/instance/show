@@ -3,7 +3,7 @@
 set -e
 umask 0002
 
-OPTIONS="--show name --hostname name --polar disabled --relation-base /etc/device/services/www/mpm --relation-name name --relation-suffix .txt --relation mpm --required"
+OPTIONS="--show name --hostname name --show-flags disabled --show-table name,mpm --flag X --polar disabled --relation-base /etc/device/services/www/mpm --relation-name name --relation-suffix .txt --relation mpm --required"
 
 if [ "$1" == "--" ]; then
 

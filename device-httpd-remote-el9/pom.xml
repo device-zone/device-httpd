@@ -125,6 +125,9 @@
                 <source>
                   <location>target/classes/usr/libexec/device/services/www/remote/set</location>
                 </source>
+                <source>
+                  <location>target/classes/usr/libexec/device/services/www/remote/show</location>
+                </source>
               </sources>
             </mapping>
           </mappings>

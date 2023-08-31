@@ -146,6 +146,9 @@
                 <source>
                   <location>target/classes/usr/libexec/device/services/www/open/alias/set</location>
                 </source>
+                <source>
+                  <location>target/classes/usr/libexec/device/services/www/open/alias/show</location>
+                </source>
               </sources>
             </mapping>
             <mapping>
@@ -170,6 +173,9 @@
                 </source>
                 <source>
                   <location>target/classes/usr/libexec/device/services/www/safe/alias/set</location>
+                </source>
+                <source>
+                  <location>target/classes/usr/libexec/device/services/www/safe/alias/show</location>
                 </source>
               </sources>
             </mapping>

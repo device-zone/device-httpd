@@ -3,7 +3,7 @@
 set -e
 umask 0002
 
-OPTIONS="--show name --hostname name --polar disabled --polar tls-redirect --integer-minimum 1 --integer timeout --select-base /usr/libexec/device/services/www/virtualhost/tls-verify.txt --select tls-verify --symlink-base /etc/pki/tls/certs --symlink-suffix .crt --symlink tls-ca-certs --required --fqdn server-name --relation-base /etc/device/services/www/listen --relation-name name --relation-suffix .txt --relation listen"
+OPTIONS="--show name --hostname name --show-flags disabled --show-table name,timeout,tls-verify,server-name,listen --flag X --polar disabled --polar tls-redirect --integer-minimum 1 --integer timeout --select-base /usr/libexec/device/services/www/virtualhost/tls-verify.txt --select tls-verify --symlink-base /etc/pki/tls/certs --symlink-suffix .crt --symlink tls-ca-certs --required --fqdn server-name --relation-base /etc/device/services/www/listen --relation-name name --relation-suffix .txt --relation listen"
 
 if [ "$1" == "--" ]; then
 
