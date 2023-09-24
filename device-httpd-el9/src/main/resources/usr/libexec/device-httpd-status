@@ -55,11 +55,17 @@ while read line; do
 
   if test -f "$line/disabled.bin"; then
     echo "- httpd@device-${instance}: disabled"
-  else
+  elif systemctl is-failed --quiet httpd-autodiscovery.service; then
+    echo "- httpd@device-${instance}: autodiscovery-failed"
+  elif systemctl is-active --quiet httpd-autodiscovery.service; then
     echo -n "- httpd@device-${instance}: "
     SYSTEMD_COLORS=1 systemctl is-active "httpd@device-${instance}" || true
     echo -n "  configtest: "
     /usr/sbin/httpd -t -f /etc/httpd/conf/device-${instance}.conf || true
+  elif systemctl is-enabled --quiet httpd-autodiscovery.service; then
+    echo "- httpd@device-${instance}: scheduled-for-startup"
+  else
+    echo "- httpd@device-${instance}: autodiscovery-disabled"
   fi
 
   found="found"
