@@ -10,6 +10,12 @@ if [ $# -eq 2 ]; then
 # DO NOT MODIFY THIS FILE - it will be overwritten on server restart.
 #
 
+<IfModule !authn_core_module>
+  LoadModule authn_core_module modules/mod_authn_core.so
+</IfModule>
+<IfModule !authn_anon_module>
+  LoadModule authn_anon_module modules/mod_authn_anon.so
+</IfModule>
 <IfModule !authz_core_module>
   LoadModule authz_core_module modules/mod_authz_core.so
 </IfModule>
@@ -60,16 +66,32 @@ EOF
       if test -n "${ldap_instance}" -a -n "${ldap_suffix}"; then
         cat >> "device-${instance}-auth.conf" <<- EOF
 
-<AuthzProviderAlias ldap-group device-${authname} "${ldap_group}">
+<AuthzProviderAlias ldap-group device-tls-${authname} "${ldap_group}">
   LDAPBind mechanism EXTERNAL
   AuthLDAPURL ldapi://%2frun%2fslapd-${ldap_instance}.socket/${ldap_suffix}?uid,inetSubscriberAccountId?sub?inetSubscriberAccountId=*
   AuthLDAPRemoteUserAttribute inetSubscriberAccountId
+</AuthzProviderAlias>
+<AuthnProviderAlias ldap device-user-${authname}>
+  LDAPBind mechanism EXTERNAL
+  AuthLDAPURL ldapi://%2frun%2fslapd-${ldap_instance}.socket/${ldap_suffix}?mail?sub
+</AuthnProviderAlias>
+<AuthzProviderAlias ldap-group device-user-${authname} "${ldap_group}">
+  LDAPBind mechanism EXTERNAL
+  AuthLDAPURL ldapi://%2frun%2fslapd-${ldap_instance}.socket/${ldap_suffix}?mail?sub
 </AuthzProviderAlias>
 EOF
       else
         cat >> "device-${instance}-auth.conf" <<- EOF
 # device-${authname}: ldap-group "${ldap_group}" but no LDAP instance "${ldap_instance}" / suffix "${ldap_suffix}" specified, ignoring
-<AuthzProviderAlias all device-${authname} denied>
+<AuthzProviderAlias all device-tls-${authname} denied>
+</AuthzProviderAlias>
+<AuthnProviderAlias anon device-user-${authname}>
+  Anonymous_NoUserID on
+  Anonymous_MustGiveEmail off
+  Anonymous_VerifyEmail off
+  Anonymous_LogEmail off
+</AuthnProviderAlias>
+<AuthzProviderAlias all device-user-${authname} denied>
 </AuthzProviderAlias>
 EOF
       fi
@@ -79,16 +101,32 @@ EOF
       if test -n "${ldap_instance}" -a -n "${ldap_suffix}"; then
         cat >> "device-${instance}-auth.conf" <<- EOF
 
-<AuthzProviderAlias valid-user device-${authname}>
+<AuthzProviderAlias valid-user device-tls-${authname}>
   LDAPBind mechanism EXTERNAL
   AuthLDAPURL ldapi://%2frun%2fslapd-${ldap_instance}.socket/${ldap_suffix}?uid,inetSubscriberAccountId?sub?inetSubscriberAccountId=*
   AuthLDAPRemoteUserAttribute inetSubscriberAccountId
+</AuthzProviderAlias>
+<AuthnProviderAlias ldap device-user-${authname}>
+  LDAPBind mechanism EXTERNAL
+  AuthLDAPURL ldapi://%2frun%2fslapd-${ldap_instance}.socket/${ldap_suffix}?mail?sub
+</AuthnProviderAlias>
+<AuthzProviderAlias valid-user device-user-${authname}>
+  LDAPBind mechanism EXTERNAL
+  AuthLDAPURL ldapi://%2frun%2fslapd-${ldap_instance}.socket/${ldap_suffix}?mail?sub
 </AuthzProviderAlias>
 EOF
       else
         cat >> "device-${instance}-auth.conf" <<- EOF
 # device-${authname}: no LDAP instance "${ldap_instance}" / suffix "${ldap_suffix}" specified, ignoring
-<AuthzProviderAlias all device-${authname} denied>
+<AuthzProviderAlias all device-tls-${authname} denied>
+</AuthzProviderAlias>
+<AuthnProviderAlias anon device-user-${authname}>
+  Anonymous_NoUserID on
+  Anonymous_MustGiveEmail off
+  Anonymous_VerifyEmail off
+  Anonymous_LogEmail off
+</AuthnProviderAlias>
+<AuthzProviderAlias all device-user-${authname} denied>
 </AuthzProviderAlias>
 EOF
       fi

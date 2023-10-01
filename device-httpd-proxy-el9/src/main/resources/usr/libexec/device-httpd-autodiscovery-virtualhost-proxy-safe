@@ -119,7 +119,7 @@ EOF
 
     if test -n "${authname}"; then
       cat >> "location.conf" <<- EOF
-    require device-${authname}
+    require device-tls-${authname}
 
     ErrorDocument 403 "<html><head><title>403 Forbidden</title></head><body><h1>Forbidden</h1><p>Your gadget '%{SSL_CLIENT_S_DN_CN}' currently does not have permission to access this URL.${access_text}</p></body></html>"
 
