@@ -60,8 +60,10 @@ while read line; do
   elif systemctl is-active --quiet httpd-autodiscovery.service; then
     echo -n "- httpd@device-${instance}: "
     SYSTEMD_COLORS=1 systemctl is-active "httpd@device-${instance}" || true
-    echo -n "  configtest: "
-    /usr/sbin/httpd -t -f /etc/httpd/conf/device-${instance}.conf || true
+    if test -r "/etc/httpd/conf/device-${instance}.conf"; then
+      echo -n "  configtest: "
+      /usr/sbin/httpd -t -f /etc/httpd/conf/device-${instance}.conf || true
+    fi
   elif systemctl is-enabled --quiet httpd-autodiscovery.service; then
     echo "- httpd@device-${instance}: scheduled-for-startup"
   else
