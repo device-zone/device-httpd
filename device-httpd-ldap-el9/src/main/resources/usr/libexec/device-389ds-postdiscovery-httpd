@@ -8,7 +8,8 @@
 
 set -e
 
-instance="${1}"
+request="${1}"
+instance="${2}"
 
 uris="ldapi://%2frun%2fslapd-${instance}.socket"
 
@@ -44,9 +45,7 @@ while read line; do
   if [ ! -e "$line/instance.d/name.txt" ]; then
     continue;
   fi
-  instance="$(head $line/instance.d/name.txt)"
-
-  if [ "${instance}" != "${1}" ]; then
+  if [ "${instance}" != "$(head -n 1 $line/instance.d/name.txt)" ]; then
     continue;
   fi
 
