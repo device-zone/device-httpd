@@ -1,0 +1,2 @@
+%selinux_modules_install -s targeted %{_datadir}/selinux/packages/targeted/device-httpd.pp.bz2
+%selinux_relabel_post -s targeted

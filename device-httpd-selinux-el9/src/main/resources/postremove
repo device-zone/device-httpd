@@ -1,0 +1,4 @@
+if [ $1 -eq 0 ]; then
+    %selinux_modules_uninstall -s targeted device-httpd
+    %selinux_relabel_post -s targeted
+fi
