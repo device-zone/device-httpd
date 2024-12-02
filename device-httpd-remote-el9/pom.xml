@@ -133,6 +133,7 @@
           </mappings>
           <requires>
             <require>device</require>
+            <require>redwax-tool &gt;= 0.9.7</require>
           </requires>
         </configuration>
       </plugin>

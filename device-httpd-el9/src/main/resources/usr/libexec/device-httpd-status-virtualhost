@@ -70,6 +70,7 @@ if [ $# -eq 2 ]; then
                   --pem-in="/etc/pki/tls/certs/*.pem" \
                   --filter=search \
                   --filter-hostname="${servername}" \
+                  --filter-purpose=sslserver \
                   --filter-current \
                   --quiet \
                   --format-out json \
