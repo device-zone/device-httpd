@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 #
 # Apache httpd Server Status
@@ -7,39 +7,6 @@
 # This script generates a dynamic status of the configuration.
 
 set -e
-
-
-#
-# Handle the cleanup
-# ------------------
-cleanup_before_exit () {
-  if [ -d "${tmpdir}" ]; then
-    rm -rf "${tmpdir}"
-  fi
-}
-# be in a temporary workspace (this works on linux and macosx)
-tmpdir=`mktemp -d 2>/dev/null || mktemp -d -t 'tmpdir'`
-# trap catches the exit signal and runs the specified function
-trap cleanup_before_exit EXIT
-# be in our directory
-cd "${tmpdir}"
-
-
-#
-# Per application? Run all scripts
-
-run_scripts() {
-
-  instance="${1}"
-  line="${2}"
-
-  # absolute path, otherwise symlink + login shell breaks. See https://unix.stackexchange.com/questions/30446/strange-behavior-in-dirname-readlink-f-0
-  find "/usr/libexec/device-status/httpd.d" -type f -executable | sort | \
-  while read x; do
-    "$x" "${instance}" "${line}" < /dev/null || true;
-  done
-
-}
 
 
 echo
@@ -72,7 +39,7 @@ while read line; do
 
   found="found"
 
-  run_scripts "${instance}" "${line}"
+  /usr/bin/sequence "/usr/libexec/device-status/httpd.d" "${instance}" "${line}"
 
 done < <(find /etc/device/services/www/instance/ -mindepth 1 -maxdepth 1 -type l)
 

@@ -1,21 +1,4 @@
-#!/bin/bash
-
-#
-# Per application? Run all scripts
-
-run_scripts() {
-
-  instance="${1}"
-  virtualhost="${2}"
-  url="${3}"
-  line="${4}"
-
-  find "/usr/libexec/device-status/httpd-virtualhost.d" -type f -executable | sort | \
-  while read x; do
-    "$x" "${instance}" "${virtualhost}" "${url}" "${line}" < /dev/null || true;
-  done
-
-}
+#!/bin/sh
 
 
 if [ $# -eq 2 ]; then
@@ -109,7 +92,7 @@ if ( .Data.Validity.Status != null ) then "      status: " + colors.green + .Dat
 
     fi
 
-    run_scripts "${instance}" "${virtualhost}" "${url}" "${line}"
+    /usr/bin/sequence "/usr/libexec/device-status/httpd-virtualhost.d" "${instance}" "${virtualhost}" "${url}" "${line}"
 
   done < <(find /etc/device/services/www/virtualhost/ -mindepth 1 -maxdepth 1 -type l)
 
