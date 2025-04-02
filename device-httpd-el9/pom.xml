@@ -465,7 +465,7 @@
             <require>mod_ssl</require>
             <require>device</require>
             <require>redwax-tool &gt;= 0.9.7</require>
-            <require>/usr/sbin/jq</require>
+            <require>/usr/bin/jq</require>
             <require>/usr/sbin/semanage</require>
             <require>/usr/bin/sequence</require>
           </requires>
