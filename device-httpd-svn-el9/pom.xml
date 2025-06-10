@@ -157,7 +157,7 @@
                 <source>
                   <location>target/classes/usr/libexec/device/services/www/safe/svn/create-repo</location>
                 </source>
-	      </sources>
+              </sources>
             </mapping>
             <mapping>
               <directory>/var/www/safe/svn</directory>
@@ -171,16 +171,17 @@
             <scriptFile>target/classes/postinstall</scriptFile>
             <fileEncoding>utf-8</fileEncoding>
           </postinstallScriptlet>
-	  <preremoveScriptlet>
+          <preremoveScriptlet>
             <scriptFile>target/classes/preremove</scriptFile>
             <fileEncoding>utf-8</fileEncoding>
-	  </preremoveScriptlet>
+          </preremoveScriptlet>
           <requires>
             <require>device-httpd</require>
-	    <require>device-httpd-auth</require>
+            <require>device-httpd-auth</require>
             <require>mod_dav_svn</require>
             <require>/usr/bin/svnadmin</require>
-	    <require>recode</require>
+            <require>/usr/bin/svnlook</require>
+            <require>recode</require>
           </requires>
         </configuration>
       </plugin>

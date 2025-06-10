@@ -38,6 +38,12 @@ if [ $# -eq 3 ]; then
       continue;
     fi
 
+    if /usr/bin/svnlook info "${repository}" > /dev/null 2>&1; then
+        svnpath="SVNPath ${repository}"
+    else
+        svnpath="SVNParentPath ${repository}"
+    fi
+
     # read in the path if present
     path=""
     if test -f "${line}/path.txt"; then
@@ -86,7 +92,8 @@ if [ $# -eq 3 ]; then
 
 <Location ${path}>
   Dav svn
-  SVNPath ${repository}
+  ${svnpath}
+  SVNListParentPath on
   Options +Indexes
 
   IndexOptions FancyIndexing HTMLTable VersionSort XHTML
