@@ -4,7 +4,7 @@
   <parent>
     <artifactId>device-httpd</artifactId>
     <groupId>zone.device.platform</groupId>
-    <version>0.9.33-SNAPSHOT</version>
+    <version>0.9.33</version>
   </parent>
 
   <properties>
@@ -18,7 +18,7 @@
 
   <artifactId>device-httpd-svn</artifactId>
   <groupId>zone.device.platform.el9</groupId>
-  <version>0.9.33-SNAPSHOT</version>
+  <version>0.9.33</version>
   <packaging>rpm</packaging>
   <name>device httpd svn applicance for el9</name>
   <description>Packaging for the httpd svn appliance for ${release.distribution}</description>
