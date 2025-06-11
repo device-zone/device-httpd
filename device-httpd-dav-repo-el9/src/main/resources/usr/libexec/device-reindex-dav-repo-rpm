@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# Filter logfile lines from httpd for reindexing the dav rpm repo
+#
+# We are only interested in PUT requests, and we only consider the filename
+# resolved by httpd, so we don't use any untainted input in this script.
+#
+# We extract the DISTRIBUTION (example: el10) and ARCH (example: x86_64, noarch)
+# fields to determine the rpm repo to link the RPM to.
+
+MAVENPATH="$1"
+YUMPATH="$2"
+LOCK="$2/reindex-rpm.lock"
+
+trap "rm -f ${LOCK}" EXIT
+
+while read LINE
+do
+  if [ "x${LINE:0:4}" == "xPUT " ]; then
+    FILE=`/usr/bin/readlink -f "${LINE:4}"`
+    if [[ "${FILE}" =~ ^${MAVENPATH}/.*[.]rpm$ ]]; then
+      if [[ "${FILE}" =~ SNAPSHOT ]]; then
+        RPMREPO="snapshot"
+      else
+        RPMREPO="master unstable"
+      fi
+      touch "${LOCK}"
+      for REPO in ${RPMREPO}; do
+        RPMDIST=`/usr/bin/rpm -q --qf "%{DISTRIBUTION}\n" -p "${FILE}" | tr -cd [:alnum:]`
+        RPMPATH=${YUMPATH}/${REPO}/${RPMDIST}/`/bin/rpm -q --qf "%{ARCH}\n" -p "${FILE}"`
+        RPMFILE=${RPMPATH}/`/usr/bin/rpm -q --qf '%{NAME}-%{VERSION}-%{RELEASE}.%{DISTRIBUTION}.%{ARCH}.rpm\n' -p "${FILE}"`
+        if [ ! -f "${RPMFILE}" ]; then
+          /usr/bin/rpm -q --quiet -p "${FILE}" && \
+          /usr/bin/mkdir -p "${RPMPATH}" && \
+          /usr/bin/ln "${FILE}" "${RPMFILE}" && \
+          /usr/bin/createrepo -q --update "${YUMPATH}/${REPO}/${RPMDIST}"
+        fi
+      done
+      rm -f "${LOCK}"
+    fi
+  fi
+done
+
+

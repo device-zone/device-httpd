@@ -1,0 +1,54 @@
+#/bin/bash
+
+if test $# -lt 3;
+then
+  echo "Usage: `basename $0` repo environment rpmfile [ rpmfile ... ]"
+  exit 1
+fi
+
+for opt in "$@"
+do
+
+  if test -z "${repo}"; then
+    repo="${opt}"
+    repopath=$(readlink -f /etc/device/services/www/repo/dav/${repo}/dav.d/directory)
+    if test ! -d "${repopath}"; then
+      echo "Repo '${repo}' does not exist below /etc/device/services/www/repo/dav/" && exit 1
+    fi
+    destinationrpm="$(head -n 1 /etc/device/services/www/repo/dav/${repo}/destination-rpm.txt)"
+    if test ! -d "${repopath}/${destinationrpm}"; then
+      echo "RPM repo '${destinationrpm}' does not exist below '${repopath}'" && exit 1
+    fi
+  elif test -z "${environment}"; then
+    environment=${opt}
+    path=$(readlink -f ${repopath}/${destinationrpm}/${environment})
+    if test ! -e "${path}"; then
+      echo "Environment '${environment}' does not exist at '${repopath}/${destinationrpm}'" && exit 1
+    fi
+  else
+    # for each rpm file, sanity check and promote
+    rpm=`readlink -f "${opt}"`
+    if test ! -f "${rpm}"; then
+      echo "File ${rpm} not found" && continue
+    fi
+    rpmname=`basename ${rpm}`
+    rpmparent=`dirname ${rpm}`
+    arch=`basename ${rpmparent}`
+    rpmparent=`dirname ${rpmparent}`
+    distribution=`basename ${rpmparent}`
+    if test ! -f "${repopath}/${destinationrpm}/master/${distribution}/${arch}/${rpmname}"; then
+      echo "Source ${repopath}/${destinationrpm}/master/${distribution}/${arch}/${rpmname} does not exist" && continue
+    fi
+    if test -f "${repopath}/${destinationrpm}/${environment}/${distribution}/${arch}/${rpmname}"; then
+      echo "Destination ${repopath}/${destinationrpm}/${environment}/${distribution}/${arch}/${rpmname} already exists" && continue
+    fi
+    if test ! -d "${repopath}/${destinationrpm}/${environment}/${distribution}/${arch}"; then
+      mkdir -p "${repopath}/${destinationrpm}/${environment}/${distribution}/${arch}"
+    fi
+    ln "${repopath}/${destinationrpm}/master/${distribution}/${arch}/${rpmname}" "${repopath}/${destinationrpm}/${environment}/${distribution}/${arch}/${rpmname}"
+    /usr/bin/createrepo -v --update "${repopath}/${destinationrpm}/${environment}/${distribution}"
+  fi
+
+done
+
+

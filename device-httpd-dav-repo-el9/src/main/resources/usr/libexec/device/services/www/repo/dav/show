@@ -1,0 +1,23 @@
+#!/bin/sh
+  
+set -e
+umask 0002
+
+OPTIONS="--show dav \
+         --show-flags disabled --show-table dav,source,destination-rpm --flag X \
+         --polar disabled \
+         --url-path-rootless destination-rpm \
+         --required \
+         --relation-base /etc/device/services/www/safe/dav --relation-name name --relation-suffix .txt --relation dav \
+         --url-path-rootless source"
+
+if [ "$1" == "--" ]; then
+
+  /usr/libexec/device-set ${OPTIONS} "$@"
+
+elif [ "$1" == "-c" ]; then
+
+  /usr/libexec/device-set ${OPTIONS} "$@"
+
+fi
+
