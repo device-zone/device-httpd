@@ -1,0 +1,24 @@
+#!/bin/sh
+
+set -e
+umask 0002
+
+OPTIONS="--set name --hostname name \
+         --polar disabled \
+         --required \
+         --url-path-absolute path \
+         --relation-base /etc/device/services/www/virtualhost --relation-name name --relation-suffix .txt --relation virtualhost \
+         --uri redirect"
+
+if [ "$1" == "--" ]; then
+
+  /usr/libexec/device-set ${OPTIONS} "$@"
+
+  /usr/bin/sudo /usr/bin/systemctl try-reload-or-restart httpd-autodiscovery.service
+
+elif [ "$1" == "-c" ]; then
+
+  /usr/libexec/device-set ${OPTIONS} "$@"
+
+fi
+

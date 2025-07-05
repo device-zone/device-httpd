@@ -1,0 +1,56 @@
+#!/bin/bash
+
+if [ $# -eq 4 ]; then
+
+  instance="${1}"
+  virtualhost="${2}"
+  url="${3}"
+
+  #
+  # Handle redirect open locations
+
+  # find /etc/device/services/www/open/redirect/ -mindepth 1 -maxdepth 1 -type l
+  while read line; do
+
+    if test ! -f "$line/virtualhost.d/listen.d/instance.d/name.txt" -o "${instance}" != "$(head -n 1 $line/virtualhost.d/listen.d/instance.d/name.txt)"; then
+      continue;
+    fi
+    if test ! -f "$line/virtualhost.d/name.txt" -o "${virtualhost}" != "$(head -n 1 $line/virtualhost.d/name.txt)"; then
+      continue;
+    fi
+    if test ! -f "$line/name.txt"; then
+      continue;
+    fi
+    if test ! -f "$line/redirect.txt"; then
+      continue;
+    fi
+    location="$(head -n 1 ${line}/name.txt)"
+    redirect="$(head -n 1 ${line}/redirect.txt)"
+
+    # read server-name if present
+    if test -f "$line/virtualhost.d/server-name.txt"; then
+      servername="$(head -n 1 $line/virtualhost.d/server-name.txt)"
+    else
+      servername="$(hostname -f)"
+    fi
+
+    # read in the path if present
+    path=""
+    if test -f "${line}/path.txt"; then
+      path="$(head -n 1 ${line}/path.txt)"
+    fi
+    # empty path becomes a /
+    if test -z "${path}";then
+      path="/"
+    fi
+
+    echo
+    echo "    Open redirect + ${location}:"
+    echo "      url: ${url}${path}"
+    echo "      redirect: ${redirect}"
+
+  done < <(find /etc/device/services/www/open/redirect/ -mindepth 1 -maxdepth 1 -type l)
+
+fi
+
+
