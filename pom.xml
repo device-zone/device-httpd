@@ -37,6 +37,7 @@
     <module>device-httpd-redirect-el9</module>
     <module>device-httpd-dav-el9</module>
     <module>device-httpd-dav-repo-el9</module>
+    <module>device-httpd-home-el9</module>
     <module>device-httpd-selinux-el9</module>
     <module>device-httpd-svn-el9</module>
   </modules>
